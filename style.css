@@ -1,0 +1,225 @@
+/* --- Document Foundations --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #0b0c11; /* Deep obsidian background from your logo */
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* --- Navigation Bar (Flexbox Example 1) --- */
+.navbar {
+    display: flex;                      /* 1. Turns this bar into a Flexbox row */
+    justify-content: space-between;     /* 2. Spreads logo, links, and profile across the space */
+    align-items: center;                /* 3. Vertically centers all elements along the line */
+    padding: 15px 4%;
+    background-color: rgba(11, 12, 17, 0.95);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Sub-container holding the SVG and Text together */
+.logo-container {
+    display: flex;                      /* Another flex nested inside the navbar */
+    align-items: center;
+    gap: 10px;                          /* Adds spaces between icon and text */
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    filter: drop-shadow(0 0 8px rgba(0, 210, 255, 0.5));
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    background: linear-gradient(45deg, #00d2ff, #9b00e8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;                      /* Lines list elements horizontally */
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: #e5e5e5;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: #00d2ff;
+}
+
+.profile-box {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, #00d2ff, #9b00e8);
+    border-radius: 4px;
+    display: flex;                      /* Flexbox centering trick inside squares */
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* --- Hero Banner Section --- */
+.hero-banner {
+    height: 70vh;
+    padding: 0 4%;
+    display: flex;
+    align-items: center;               /* Keeps text box perfectly centered vertically */
+    background: linear-gradient(to right, #0b0c11 40%, transparent 100%), 
+                linear-gradient(to bottom, transparent 60%, #0b0c11 100%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://w3.org" width="100" height="100"><rect fill="%231a1b26" width="100" height="100"/></svg>');
+    background-size: cover;
+}
+
+.hero-content {
+    max-width: 550px;
+    margin-top: 50px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.hero-desc {
+    font-size: 16px;
+    color: #a3a7bd;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+.btn-play {
+    background-color: #ffffff;
+    color: #0b0c11;
+}
+
+.btn-info {
+    background-color: rgba(109, 109, 110, 0.7);
+    color: #ffffff;
+}
+
+/* --- Netflix Style Horizontal Scroller (Flexbox Example 2) --- */
+.video-section {
+    padding: 0 4% 60px 4%;
+    margin-top: -30px;
+}
+
+.section-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.video-row {
+    display: flex;                      /* Lines the card boxes horizontally */
+    gap: 15px;
+    overflow-x: auto;                   /* Enables touch scroll / mousewheel swipe left-to-right */
+    padding: 10px 0;
+    scrollbar-width: none;              /* Hides standard scrollbar (Firefox) */
+}
+
+.video-row::-webkit-scrollbar {
+    display: none;                      /* Hides standard scrollbar (Chrome/Safari) */
+}
+
+/* --- Video Card Elements --- */
+.video-card {
+    min-width: 260px;                   /* Ensures the flex layout doesn't squash the card size */
+    background-color: #141622;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 20px rgba(155, 0, 232, 0.35); /* Neon violet ambient shadow */
+}
+
+.video-thumb {
+    height: 140px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;            /* Centers the play icon right in the middle */
+} 
+
+
+
+/* Custom Gradient Thumbnails */
+.thumb-1 { background: linear-gradient(45deg, #00d2ff, #240b36); }
+.thumb-2 { background: linear-gradient(45deg, #9b00e8, #0b0c11); }
+.thumb-3 { background: linear-gradient(45deg, #00d2ff, #9b00e8); }
+.thumb-4 { background: linear-gradient(45deg, #9b00e8, #240b36); }
+.thumb-5 { background: linear-gradient(45deg, #00d2ff, #0b0c11); }
+.thumb-6 { background: linear-gradient(45deg, #9b00e8, #00d2ff); }
+.thumb-7 { background: linear-gradient(45deg, #00d2ff, #9b00e8); }
+.thumb-8 { background: linear-gradient(45deg, #9b00e8, #240b36); }
+
+.play-overlay {
+    font-size: 32px;
+    color: #ffffff;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.video-card:hover .play-overlay {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.video-details {
+    padding: 12px;
+}
+
+.video-duration {
+    font-size: 11px;
+    color: #00d2ff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.video-details h3 {
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+    line-height: 1.3;
+}

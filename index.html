@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DayStream - Flexbox Streaming Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Main Navigation Bar Using Flexbox -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <!-- DayStream Custom SVG Icon Symbol -->
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://w3.org">
+                <!-- Play triangle icon -->
+                <path d="M25,25 L60,50 L25,75 Z" fill="none" stroke="url(#brandGradient)" stroke-width="8" stroke-linejoin="round"/>
+                <!-- Chevron bracket > icon -->
+                <path d="M68,30 L85,50 L68,70" fill="none" stroke="url(#brandGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                <!-- Glow gradient definitions -->
+                <defs>
+                    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#00d2ff" />
+                        <stop offset="100%" stop-color="#9b00e8" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="logo-text">DevStream</span>
+        </div>
+        
+        <ul class="nav-links">
+            <li><a href="#" class="active">Browse</a></li>
+            <li><a href="#">My List</a></li>
+            <li><a href="#">Top Courses</a></li>
+        </ul>
+        
+        <div class="profile-box">JS</div>
+    </nav>
+
+    <!-- Main Content wrapper -->
+    <main class="viewport-wrapper">
+        
+        <!-- Hero Video Section -->
+        <header class="hero-banner">
+            <div class="hero-content">
+                <h1 class="hero-title">Next-Gen UI & AI Product Engineering.</h1>
+                <p class="hero-desc">Build lightning-fast, visually stunning web applications. Learn to integrate intelligent generative AI systems directly into interactive, user-focused web interfaces.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-play">▶ Play Lecture</button>
+                    <button class="btn btn-info">ⓘ More Info</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Horizontal Video Queue Container -->
+        <section class="video-section">
+            <h2 class="section-title">Trending Web Development Modules</h2>
+
+    <div class="video-row" id="videoContainer">
+    
+        <!-- Card 1: JavaScript -->
+        <article class="video-card" data-video="1" data-title="Mastering Modern Asynchronous JavaScript" data-desc="Learn how the event loop manages data fetching, promises, and async/await blocks to keep dynamic interfaces snappy and lightning fast.">
+            <div class="video-thumb">
+                <img src="https://unsplash.com" alt="JavaScript" class="poster-img">
+                <div class="play-overlay">▶</div>
+            </div>
+            <div class="video-details"><span class="video-duration">15 min</span><h3>Mastering Modern Asynchronous JavaScript</h3></div>
+        </article>
+
+        <!-- Card 2: React Component -->
+        <article class="video-card" data-video="2" data-title="Component Architecture & State in React" data-desc="Break complex screen interfaces down into small, reusable components. Control structural data flow perfectly with modern state engines.">
+            <div class="video-thumb">
+                <img src="https://unsplash.com" alt="React" class="poster-img">
+                <div class="play-overlay">▶</div>
+            </div>
+            <div class="video-details"><span class="video-duration">28 min</span><h3>Component Architecture & State in React</h3></div>
+        </article>
+
+        <!-- Card 3: Databases -->
+        <article class="video-card" data-video="3" data-title="Designing High-Scale Relational Databases" data-desc="Learn data modeling, structure custom API schemas, and optimize SQL database indexing queries for real-world enterprise applications.">
+            <div class="video-thumb">
+                <img src="https://unsplash.com" alt="Database" class="poster-img">
+                <div class="play-overlay">▶</div>
+            </div>
+            <div class="video-details"><span class="video-duration">34 min</span><h3>Designing High-Scale Relational Databases</h3></div>
+        </article>
+
+        <!-- Card 4: NextJS Rendering -->
+        <article class="video-card" data-video="4" data-title="NextJS Rendering Engine Frameworks" data-desc="Discover Server-Side Rendering (SSR) versus Static Site Generation (SSG) to build apps with perfect Search Engine Optimization (SEO).">
+            <div class="video-thumb">
+                <img src="https://unsplash.com" alt="NextJS" class="poster-img">
+                <div class="play-overlay">▶</div>
+            </div>
+            <div class="video-details"><span class="video-duration">20 min</span><h3>NextJS Rendering Engine Frameworks</h3></div>
+        </article>
+
+        <!-- Card 5: DevOps Cloud -->
+        <article class="video-card" data-video="5" data-title="Automated Deployment & CI/CD Pipelines" data-desc="Learn how to containerize your code using Docker and launch it smoothly onto global cloud providers like AWS or Vercel automatically.">
+            <div class="video-thumb">
+                <img src="https://unsplash.com" alt="DevOps" class="poster-img">
+                <div class="play-overlay">▶</div>
+            </div>
+            <div class="video-details"><span class="video-duration">25 min</span><h3>Automated Deployment & CI/CD Pipelines</h3></div>
+        </article>
+
+</div>
+
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
