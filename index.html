@@ -56,59 +56,75 @@
         <section class="video-section">
             <h2 class="section-title">Trending Web Development Modules</h2>
 
-    <div class="video-row" id="videoContainer">
-    
-        <!-- Card 1: JavaScript -->
-        <article class="video-card" data-video="1" data-title="Mastering Modern Asynchronous JavaScript" data-desc="Learn how the event loop manages data fetching, promises, and async/await blocks to keep dynamic interfaces snappy and lightning fast.">
-            <div class="video-thumb">
-                <img src="https://unsplash.com" alt="JavaScript" class="poster-img">
-                <div class="play-overlay">▶</div>
+            <div class="video-row" id="videoContainer">
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Developer working at a laptop" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">15 min</span><h3>Modern JavaScript</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Developers collaborating around a computer" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">28 min</span><h3>React Components</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Rows of server equipment" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">34 min</span><h3>Database Design</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Laptop and workspace for web development" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">20 min</span><h3>Next.js Frameworks</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Close-up of a computer circuit board" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">25 min</span><h3>Cloud &amp; DevOps</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Code displayed on a computer screen" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">22 min</span><h3>Build for the Web</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Programmer working with code" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">18 min</span><h3>Programming Foundations</h3></div>
+                </article>
+
+                <article class="video-card">
+                    <div class="video-thumb">
+                        <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="A developer desk with multiple monitors" class="poster-img">
+                        <span class="play-overlay" aria-hidden="true">▶</span>
+                    </div>
+                    <div class="video-details"><span class="video-duration">26 min</span><h3>Cloud Engineering</h3></div>
+                </article>
             </div>
-            <div class="video-details"><span class="video-duration">15 min</span><h3>Mastering Modern Asynchronous JavaScript</h3></div>
-        </article>
 
-        <!-- Card 2: React Component -->
-        <article class="video-card" data-video="2" data-title="Component Architecture & State in React" data-desc="Break complex screen interfaces down into small, reusable components. Control structural data flow perfectly with modern state engines.">
-            <div class="video-thumb">
-                <img src="https://unsplash.com" alt="React" class="poster-img">
-                <div class="play-overlay">▶</div>
-            </div>
-            <div class="video-details"><span class="video-duration">28 min</span><h3>Component Architecture & State in React</h3></div>
-        </article>
-
-        <!-- Card 3: Databases -->
-        <article class="video-card" data-video="3" data-title="Designing High-Scale Relational Databases" data-desc="Learn data modeling, structure custom API schemas, and optimize SQL database indexing queries for real-world enterprise applications.">
-            <div class="video-thumb">
-                <img src="https://unsplash.com" alt="Database" class="poster-img">
-                <div class="play-overlay">▶</div>
-            </div>
-            <div class="video-details"><span class="video-duration">34 min</span><h3>Designing High-Scale Relational Databases</h3></div>
-        </article>
-
-        <!-- Card 4: NextJS Rendering -->
-        <article class="video-card" data-video="4" data-title="NextJS Rendering Engine Frameworks" data-desc="Discover Server-Side Rendering (SSR) versus Static Site Generation (SSG) to build apps with perfect Search Engine Optimization (SEO).">
-            <div class="video-thumb">
-                <img src="https://unsplash.com" alt="NextJS" class="poster-img">
-                <div class="play-overlay">▶</div>
-            </div>
-            <div class="video-details"><span class="video-duration">20 min</span><h3>NextJS Rendering Engine Frameworks</h3></div>
-        </article>
-
-        <!-- Card 5: DevOps Cloud -->
-        <article class="video-card" data-video="5" data-title="Automated Deployment & CI/CD Pipelines" data-desc="Learn how to containerize your code using Docker and launch it smoothly onto global cloud providers like AWS or Vercel automatically.">
-            <div class="video-thumb">
-                <img src="https://unsplash.com" alt="DevOps" class="poster-img">
-                <div class="play-overlay">▶</div>
-            </div>
-            <div class="video-details"><span class="video-duration">25 min</span><h3>Automated Deployment & CI/CD Pipelines</h3></div>
-        </article>
-
-</div>
-
-
-            </div>
         </section>
     </main>
 
+    <script src="app.js"></script>
 </body>
 </html>

@@ -161,7 +161,7 @@ body {
 
 /* --- Video Card Elements --- */
 .video-card {
-    min-width: 260px;                   /* Ensures the flex layout doesn't squash the card size */
+    flex: 0 0 260px;
     background-color: #141622;
     border-radius: 6px;
     overflow: hidden;
@@ -171,7 +171,7 @@ body {
 
 .video-card:hover {
     transform: scale(1.04);
-    box-shadow: 0 8px 20px rgba(155, 0, 232, 0.35); /* Neon violet ambient shadow */
+    box-shadow: 0 8px 20px rgba(155, 0, 232, 0.35);
 }
 
 .video-thumb {
@@ -179,31 +179,63 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;            /* Centers the play icon right in the middle */
-} 
-
-
-
-/* Custom Gradient Thumbnails */
-.thumb-1 { background: linear-gradient(45deg, #00d2ff, #240b36); }
-.thumb-2 { background: linear-gradient(45deg, #9b00e8, #0b0c11); }
-.thumb-3 { background: linear-gradient(45deg, #00d2ff, #9b00e8); }
-.thumb-4 { background: linear-gradient(45deg, #9b00e8, #240b36); }
-.thumb-5 { background: linear-gradient(45deg, #00d2ff, #0b0c11); }
-.thumb-6 { background: linear-gradient(45deg, #9b00e8, #00d2ff); }
-.thumb-7 { background: linear-gradient(45deg, #00d2ff, #9b00e8); }
-.thumb-8 { background: linear-gradient(45deg, #9b00e8, #240b36); }
-
-.play-overlay {
-    font-size: 32px;
-    color: #ffffff;
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    justify-content: center;
+    overflow: hidden;
+    background: #141622;
 }
 
-.video-card:hover .play-overlay {
+.poster-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.95) brightness(1.05);
+    transition: transform 0.35s ease;
+}
+
+.video-thumb::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, transparent 52%, rgba(0, 0, 0, 0.5) 100%);
+    pointer-events: none;
+}
+
+.video-card:hover .poster-img {
+    transform: scale(1.06);
+}
+
+.play-overlay {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    font-size: 24px;
+    color: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.video-card:hover .play-overlay,
+.video-card:focus-within .play-overlay {
     opacity: 1;
+    visibility: visible;
     transform: scale(1.1);
+}
+
+@media (hover: none) {
+    .play-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
 }
 
 .video-details {
@@ -223,3 +255,4 @@ body {
     font-weight: 500;
     line-height: 1.3;
 }
+
