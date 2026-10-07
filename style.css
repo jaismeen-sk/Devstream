@@ -78,6 +78,8 @@ body {
 
 /* --- Hero Banner Section --- */
 .hero-banner {
+    display: flex;
+    justify-content: center;
     height: 70vh;
     padding: 0 4%;
     display: flex;
@@ -91,7 +93,10 @@ body {
 .hero-content {
     max-width: 550px;
     margin-top: 50px;
+    text-align: center;
 }
+    
+
 
 .hero-title {
     font-size: 48px;
@@ -107,6 +112,7 @@ body {
 }
 
 .hero-buttons {
+    justify-content: center;
     display: flex;
     gap: 12px;
 }
