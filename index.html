@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DayStream - Flexbox Streaming Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,12 +28,29 @@
             </svg>
             <span class="logo-text">DevStream</span>
         </div>
+        <div class="nav-search">
+            <!-- <label class="course-search-label" for="courseSearch">Search courses</label>
+<input
+    id="courseSearch"
+    class="search-input"
+    type="search"
+    placeholder="Search by course name..."
+> -->
+
+
+
+            <input placeholder="Search courses..." class="search-input">
+            <p id="noCoursesMessage" class="search-empty" hidden>No courses match your search.</p>
+                <div class="search-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>   
+        </div>
         
-        <ul class="nav-links">
+        <!-- <ul class="nav-links">
             <li><a href="#" class="active">Browse</a></li>
             <li><a href="#">My List</a></li>
             <li><a href="#">Top Courses</a></li>
-        </ul>
+        </ul> -->
 
         <!-- <div class="profile-box">JS</div> -->
         <details class="profile-menu">
@@ -45,6 +63,7 @@
         </details>
     </nav>
 
+    
     <!-- Main Content wrapper -->
     <main class="viewport-wrapper">
         
@@ -62,19 +81,6 @@
 
         <!-- Horizontal Video Queue Container -->
         <section class="video-section">
-
-            <!-- <label class="course-search-label" for="courseSearch">Search courses</label>
-            <input
-                id="courseSearch"
-                class="course-search"
-                type="search"
-                placeholder="Search by course name..."
-            >
-            <p id="noCoursesMessage" class="search-empty" hidden>
-                No courses match your search.
-            </p> -->
-
-
             <h2 class="section-title">Trending Web Development Modules</h2>
 
             <div class="video-row" id="videoContainer">

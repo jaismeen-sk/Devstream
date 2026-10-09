@@ -1,21 +1,27 @@
-// const searchInput = document.getElementById("courseSearch");
-// const courseCards = document.querySelectorAll("#videoContainer .video-card");
-// const noCoursesMessage = document.getElementById("noCoursesMessage");
+const searchInput = document.querySelector(".nav-search .search-input");
+const courseCards = document.querySelectorAll("#videoContainer .video-card");
+const noCoursesMessage = document.getElementById("noCoursesMessage");
 
-// searchInput.addEventListener("input", () => {
-//     const searchText = searchInput.value.trim().toLowerCase();
-//     let visibleCourseCount = 0;
+if (!searchInput) {
+    throw new Error("Course search input was not found.");
+}
 
-//     courseCards.forEach((card) => {
-//         const courseTitle = card.querySelector("h3").textContent.toLowerCase();
-//         const matchesSearch = courseTitle.includes(searchText);
+searchInput.addEventListener("input", () => {
+    const searchText = searchInput.value.trim().toLowerCase();
+    let visibleCourseCount = 0;
 
-//         card.style.display = matchesSearch ? "" : "none";
+    courseCards.forEach((card) => {
+        const courseTitle = card.querySelector("h3").textContent.trim().toLowerCase();
+        const matchesSearch = courseTitle.includes(searchText);
 
-//         if (matchesSearch) {
-//             visibleCourseCount++;
-//         }
-//     });
+        card.style.display = matchesSearch ? "" : "none";
 
-//     noCoursesMessage.hidden = visibleCourseCount > 0;
-// });
+        if (matchesSearch) {
+            visibleCourseCount++;
+        }
+    });
+
+    if (noCoursesMessage) {
+        noCoursesMessage.hidden = visibleCourseCount > 0;
+    }
+});
