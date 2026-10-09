@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DayStream - Flexbox Streaming Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,16 +28,42 @@
             </svg>
             <span class="logo-text">DevStream</span>
         </div>
+        <div class="nav-search">
+            <!-- <label class="course-search-label" for="courseSearch">Search courses</label>
+<input
+    id="courseSearch"
+    class="search-input"
+    type="search"
+    placeholder="Search by course name..."
+> -->
+
+
+
+            <input placeholder="Search courses..." class="search-input">
+            <p id="noCoursesMessage" class="search-empty" hidden>No courses match your search.</p>
+                <div class="search-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>   
+        </div>
         
-        <ul class="nav-links">
+        <!-- <ul class="nav-links">
             <li><a href="#" class="active">Browse</a></li>
             <li><a href="#">My List</a></li>
             <li><a href="#">Top Courses</a></li>
-        </ul>
-        
-        <div class="profile-box">JS</div>
+        </ul> -->
+
+        <!-- <div class="profile-box">JS</div> -->
+        <details class="profile-menu">
+            <summary class="profile-box" aria-label="Open profile menu">JS</summary>
+            <div class="profile-dropdown">
+                <a href="#my-learning">My Learning</a>
+                <a href="#wishlist">Whishlist</a>
+                <a href="#settings">Settings</a>
+            </div>
+        </details>
     </nav>
 
+    
     <!-- Main Content wrapper -->
     <main class="viewport-wrapper">
         
@@ -205,22 +232,12 @@
         </nav>
     </div>
     <div>
-    <!-- <h2>Support</h2>
-    <a href="mailto:hello@example.com">Contact us</a>
-    <a href="mailto:hello@example.com?subject=Feedback">Send feedback</a>
-    </div>
-
-    <div>
-    <h2>Follow</h2>
-    <a href="https://github.com/your-username"
-       target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a href="https://www.linkedin.com/"
-       target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    </div> -->
+    
 
     <p class="footer-bottom">&copy; 2026 DevStream. All rights reserved.</p>
     </footer>
 
-    <script src="app.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
