@@ -500,6 +500,104 @@ body {
     line-height: 1.3;
 }
 
+/* Course cards show a saved status and a compact progress bar. */
+.card-progress {
+    margin-top: 12px;
+}
+
+.card-progress-status {
+    margin-bottom: 6px;
+    color: #a3a7bd;
+    font-size: 12px;
+}
+
+.card-progress-bar,
+#dialogProgressBar {
+    display: block;
+    width: 100%;
+    height: 8px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 999px;
+    background: #292c3a;
+    accent-color: #00d2ff;
+}
+
+.card-progress-bar::-webkit-progress-bar,
+#dialogProgressBar::-webkit-progress-bar {
+    background: #292c3a;
+    border-radius: 999px;
+}
+
+.card-progress-bar::-webkit-progress-value,
+#dialogProgressBar::-webkit-progress-value {
+    background: linear-gradient(90deg, #00d2ff, #9b00e8);
+    border-radius: 999px;
+}
+
+.card-progress-bar::-moz-progress-bar,
+#dialogProgressBar::-moz-progress-bar {
+    background: linear-gradient(90deg, #00d2ff, #9b00e8);
+    border-radius: 999px;
+}
+
+/* The dialog lets learners advance the demo progress or mark the course complete. */
+.course-progress-panel {
+    margin-top: 24px;
+    padding: 16px;
+    background: #1c1f2d;
+    border: 1px solid #333542;
+    border-radius: 8px;
+}
+
+.course-progress-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.course-progress-heading h3 {
+    font-size: 16px;
+}
+
+#dialogProgressPercent {
+    color: #00d2ff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#dialogProgressStatus {
+    margin-top: 8px;
+    color: #a3a7bd;
+    font-size: 13px;
+}
+
+.course-progress-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.btn-progress {
+    color: #0b0c11;
+    background: #00d2ff;
+}
+
+.btn-complete {
+    color: #ffffff;
+    background: #34384d;
+}
+
+.btn-progress:disabled,
+.btn-complete:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+}
+
 /* --- Horizontal Reasons to Join Row ---
    Grid columns become fewer at tablet and phone widths below. */
 .reasons-section {

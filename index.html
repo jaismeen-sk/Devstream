@@ -224,6 +224,24 @@
                     <h3 class="course-dialog-tags-title">Topics</h3>
                     <ul class="course-dialog-tags" id="dialogCourseTags"></ul>
                 </div>
+                <!-- These controls simulate lesson progress for this frontend-only demo. -->
+                <section class="course-progress-panel" aria-label="Learning progress">
+                    <div class="course-progress-heading">
+                        <h3>Learning progress</h3>
+                        <span id="dialogProgressPercent">0%</span>
+                    </div>
+                    <progress id="dialogProgressBar" max="100" value="0"
+                        aria-label="Course completion progress">0%</progress>
+                    <p id="dialogProgressStatus" role="status" aria-live="polite">Not started</p>
+                    <div class="course-progress-actions">
+                        <button class="btn btn-progress" id="progressCourseBtn" type="button">
+                            Start learning
+                        </button>
+                        <button class="btn btn-complete" id="completeCourseBtn" type="button">
+                            Mark completed
+                        </button>
+                    </div>
+                </section>
                 <!-- Enrollment is a frontend demo saved in this browser's localStorage. -->
                 <div class="course-dialog-actions">
                     <button class="btn btn-enroll" id="enrollCourseBtn" type="button">Enroll</button>
