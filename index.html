@@ -28,6 +28,7 @@
             </svg>
             <span class="logo-text">DevStream</span>
         </div>
+        <!-- JavaScript reads this input to search course titles. -->
         <div class="nav-search">
            <input placeholder="   Search by course name..." class="search-input">
             <p id="noCoursesMessage" class="search-empty" hidden>No courses match your search.</p>
@@ -75,6 +76,7 @@
         <section class="video-section">
             <h2 class="section-title">Trending Web Development Modules</h2>
 
+            <!-- Each button's data-category must match the category on a course card. -->
             <div class="category-filters" aria-label="Filter courses by category">
                 <button type="button" class="category-filter active"
                 data-category="all" aria-pressed="true">All</button>
@@ -94,8 +96,13 @@
 
 
 
+            <!-- Course details are stored in data-* attributes for the JavaScript modal. -->
             <div class="video-row" id="videoContainer">
-                <article class="video-card" data-category="javascript">
+                <article class="video-card" data-category="javascript"
+                    data-course-id="modern-javascript"
+                    data-description="Learn modern JavaScript fundamentals and use them to build interactive web experiences."
+                    data-level="Beginner" data-instructor="DevStream Team"
+                    data-tags="JavaScript, DOM, ES6">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Developer working at a laptop" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -103,7 +110,11 @@
                     <div class="video-details"><span class="video-duration">15 min</span><h3>Modern JavaScript</h3></div>
                 </article>
 
-                <article class="video-card" data-category="frameworks">
+                <article class="video-card" data-category="frameworks"
+                    data-course-id="react-components"
+                    data-description="Understand reusable React components and how they help you organize user interfaces."
+                    data-level="Intermediate" data-instructor="DevStream Team"
+                    data-tags="React, Components, UI">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Developers collaborating around a computer" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -111,7 +122,11 @@
                     <div class="video-details"><span class="video-duration">28 min</span><h3>React Components</h3></div>
                 </article>  
 
-                <article class="video-card" data-category="backend">
+                <article class="video-card" data-category="backend"
+                    data-course-id="database-design"
+                    data-description="Explore the fundamentals of structuring data and designing reliable databases."
+                    data-level="Beginner" data-instructor="DevStream Team"
+                    data-tags="Database, Data Modeling, Backend">
                     <div class="video-thumb">  
                         <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Rows of server equipment" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -119,7 +134,11 @@
                     <div class="video-details"><span class="video-duration">34 min</span><h3>Database Design</h3></div>
                 </article>
 
-                <article class="video-card" data-category="frameworks">
+                <article class="video-card" data-category="frameworks"
+                    data-course-id="nextjs-frameworks"
+                    data-description="Get introduced to Next.js and the framework features used to build web applications."
+                    data-level="Intermediate" data-instructor="DevStream Team"
+                    data-tags="Next.js, React, Frameworks">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Laptop and workspace for web development" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -127,7 +146,11 @@
                     <div class="video-details"><span class="video-duration">20 min</span><h3>Next.js Frameworks</h3></div>
                 </article>
 
-                <article class="video-card" data-category="cloud">
+                <article class="video-card" data-category="cloud"
+                    data-course-id="cloud-devops"
+                    data-description="Learn foundational cloud and DevOps concepts for building, deploying, and maintaining software."
+                    data-level="Beginner" data-instructor="DevStream Team"
+                    data-tags="Cloud, DevOps, Deployment">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Close-up of a computer circuit board" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -135,7 +158,11 @@
                     <div class="video-details"><span class="video-duration">25 min</span><h3>Cloud &amp; DevOps</h3></div>
                 </article>
 
-                <article class="video-card" data-category="foundations">
+                <article class="video-card" data-category="foundations"
+                    data-course-id="build-for-the-web"
+                    data-description="Explore the core technologies and ideas behind building websites for the modern web."
+                    data-level="Beginner" data-instructor="DevStream Team"
+                    data-tags="Web, HTML, CSS">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Code displayed on a computer screen" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -143,7 +170,11 @@
                     <div class="video-details"><span class="video-duration">22 min</span><h3>Build for the Web</h3></div>
                 </article>
 
-                <article class="video-card" data-category="foundations">
+                <article class="video-card" data-category="foundations"
+                    data-course-id="programming-foundations"
+                    data-description="Build a foundation in programming concepts and problem-solving that applies across languages."
+                    data-level="Beginner" data-instructor="DevStream Team"
+                    data-tags="Programming, Logic, Fundamentals">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="Programmer working with code" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -151,7 +182,11 @@
                     <div class="video-details"><span class="video-duration">18 min</span><h3>Programming Foundations</h3></div>
                 </article>
 
-                <article class="video-card" data-category="cloud">
+                <article class="video-card" data-category="cloud"
+                    data-course-id="cloud-engineering"
+                    data-description="Explore cloud engineering concepts and the infrastructure used to run applications."
+                    data-level="Intermediate" data-instructor="DevStream Team"
+                    data-tags="Cloud, Infrastructure, Engineering">
                     <div class="video-thumb">
                         <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&amp;fit=crop&amp;w=720&amp;q=85" alt="A developer desk with multiple monitors" class="poster-img">
                         <!-- <span class="play-overlay" aria-hidden="true">▶</span> -->
@@ -162,6 +197,42 @@
 
         </section>
 
+        <!-- JavaScript fills this native dialog with details from the course card clicked. -->
+        <dialog class="course-dialog" id="courseDialog" aria-labelledby="dialogCourseTitle">
+            <div class="course-dialog-content">
+                <button class="course-dialog-close" id="closeCourseDialog" type="button"
+                    aria-label="Close course details">&times;</button>
+                <p class="course-dialog-eyebrow">Course details</p>
+                <h2 id="dialogCourseTitle"></h2>
+                <p class="course-dialog-description" id="dialogCourseDescription"></p>
+                <!-- The description list presents course duration, level, and instructor. -->
+                <dl class="course-dialog-meta">
+                    <div>
+                        <dt>Duration</dt>
+                        <dd id="dialogCourseDuration"></dd>
+                    </div>
+                    <div>
+                        <dt>Level</dt>
+                        <dd id="dialogCourseLevel"></dd>
+                    </div>
+                    <div>
+                        <dt>Instructor</dt>
+                        <dd id="dialogCourseInstructor"></dd>
+                    </div>
+                </dl>
+                <div>
+                    <h3 class="course-dialog-tags-title">Topics</h3>
+                    <ul class="course-dialog-tags" id="dialogCourseTags"></ul>
+                </div>
+                <!-- Enrollment is a frontend demo saved in this browser's localStorage. -->
+                <div class="course-dialog-actions">
+                    <button class="btn btn-enroll" id="enrollCourseBtn" type="button">Enroll</button>
+                    <p id="enrollmentMessage" role="status" aria-live="polite"></p>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- This section is the destination of the hero's More Info button. -->
         <section class="reasons-section" aria-labelledby="reasons-title">
             <h2 class="section-title" id="reasons-title">More Reasons to Join</h2>
             <div class="reasons-grid">
@@ -196,6 +267,7 @@
             </div>
         </section>
     </main>
+    <!-- Footer navigation and contact links. -->
     <footer class="site-footer">
     <div class="footer-content">
         <div class="footer-brand">
@@ -249,6 +321,7 @@
     </footer>
 
 
+    <!-- Load JavaScript after the page elements so its selectors can find them. -->
     <script src="script.js"></script>
 </body>
 </html>

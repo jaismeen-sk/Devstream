@@ -76,6 +76,7 @@ body {
     font-weight: bold;
 }
 
+/* At tablet widths, stack the navigation into rows and reserve space below the fixed bar. */
 @media (max-width: 900px) {
     .navbar {
         display: grid;
@@ -115,6 +116,7 @@ body {
     }
 }
 
+/* Reduce navigation spacing and font sizes on narrow phone screens. */
 @media (max-width: 520px) {
     .navbar {
         gap: 8px 12px;
@@ -144,6 +146,7 @@ body {
 }
 
 /* --- Hero Banner Section --- */
+/* Center the hero content and layer gradients over the background artwork. */
 .hero-banner {
     display: flex;
     justify-content: center;
@@ -209,6 +212,7 @@ body {
 }
 
 /* --- Netflix Style Horizontal Scroller (Flexbox Example 2) --- */
+/* Keep the course cards in a horizontally scrollable row. */
 .video-section {
     padding: 0 4% 60px 4%;
     margin-top: -30px;
@@ -238,7 +242,8 @@ body {
     display: none;                      /* Hides standard scrollbar (Chrome/Safari) */
 }
 
-/* --- Video Card Elements --- */
+/* --- Video Card Elements ---
+   Each card gets its title and duration from the HTML; JavaScript opens its details dialog. */
 .video-card {
     flex: 0 0 260px;
     background-color: #141622;
@@ -248,9 +253,169 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.video-card:focus-visible {
+    outline: 2px solid #00d2ff;
+    outline-offset: 3px;
+}
+
 .video-card:hover {
     transform: scale(1.04);
     box-shadow: 0 8px 20px rgba(155, 0, 232, 0.35);
+}
+
+/* The native dialog sits above the page; ::backdrop styles the dimmed area behind it. */
+.course-dialog {
+    width: min(560px, calc(100% - 32px));
+    max-height: min(85vh, 720px);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    color: #ffffff;
+    background: #141622;
+    border: 1px solid #333542;
+    border-radius: 12px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.course-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+}
+
+.course-dialog-content {
+    position: relative;
+    padding: 32px;
+}
+
+.course-dialog-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    color: #ffffff;
+    background: #25283a;
+    border: 1px solid #3b3e50;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.course-dialog-close:hover,
+.course-dialog-close:focus-visible {
+    background: #34384d;
+    outline: 2px solid #00d2ff;
+    outline-offset: 2px;
+}
+
+.course-dialog-eyebrow {
+    margin-bottom: 8px;
+    color: #00d2ff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.course-dialog h2 {
+    padding-right: 32px;
+    margin-bottom: 12px;
+    font-size: 28px;
+}
+
+.course-dialog-description {
+    color: #c4c7d5;
+    line-height: 1.6;
+}
+
+/* Arrange duration, level, and instructor in three columns on wider screens. */
+.course-dialog-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.course-dialog-meta div {
+    padding: 12px;
+    background: #1c1f2d;
+    border-radius: 6px;
+}
+
+.course-dialog-meta dt {
+    margin-bottom: 6px;
+    color: #a3a7bd;
+    font-size: 12px;
+}
+
+.course-dialog-meta dd {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.course-dialog-tags-title {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.course-dialog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+}
+
+.course-dialog-tags li {
+    padding: 6px 10px;
+    color: #c5eaff;
+    background: rgba(0, 210, 255, 0.1);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.course-dialog-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.btn-enroll {
+    color: #0b0c11;
+    background: #00d2ff;
+}
+
+.btn-enroll:disabled {
+    color: #ffffff;
+    background: #34384d;
+    cursor: default;
+    transform: none;
+}
+
+#enrollmentMessage {
+    color: #a3e6b0;
+    font-size: 14px;
+}
+
+/* Stack the dialog details on phones so each value has enough room. */
+@media (max-width: 520px) {
+    .course-dialog-content {
+        padding: 26px 20px;
+    }
+
+    .course-dialog h2 {
+        font-size: 23px;
+    }
+
+    .course-dialog-meta {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin: 18px 0;
+    }
 }
 
 .video-thumb {
@@ -335,7 +500,8 @@ body {
     line-height: 1.3;
 }
 
-/* --- Horizontal Reasons to Join Row --- */
+/* --- Horizontal Reasons to Join Row ---
+   Grid columns become fewer at tablet and phone widths below. */
 .reasons-section {
     padding: 0 4% 60px;
 }
@@ -399,7 +565,8 @@ body {
 }
 
 
-/* footer */
+/* --- Footer ---
+   Footer navigation is grouped into columns, with a compact mobile layout. */
 .site-footer {
     padding: 36px 4% 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -546,6 +713,7 @@ left side footer content
 
 
 
+/* Position the profile dropdown relative to its profile button. */
 .profile-menu {
     position: relative;
 }
@@ -588,6 +756,7 @@ left side footer content
 
 
 
+/* Search field layout; JavaScript listens to the input to filter course titles. */
 .nav-search{
     display: flex;
     align-items: center;
@@ -693,6 +862,7 @@ left side footer content
 
 
 
+/* Spread filter buttons across the course section and allow wrapping on smaller screens. */
 .category-filters {
     display: flex;
     justify-content: space-between;
