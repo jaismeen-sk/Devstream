@@ -689,3 +689,36 @@ left side footer content
     gap: 12px 20px;
   }
 } */
+
+
+
+
+.category-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0 0 20px;
+}
+
+.category-filter {
+    padding: 10px 18px;
+    border: 1px solid #333542;
+    border-radius: 20px;
+    background-color: #141622;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.category-filter:hover,
+.category-filter.active {
+    background-color: #25283a;
+    border-color: #00d2ff;
+}
+
+.category-filter:focus-visible {
+    outline: 2px solid #00d2ff;
+    outline-offset: 3px;
+}

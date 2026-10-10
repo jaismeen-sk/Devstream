@@ -1,25 +1,50 @@
-// 
 const searchInput = document.querySelector(".nav-search .search-input");
 const courseCards = document.querySelectorAll("#videoContainer .video-card");
 const noCoursesMessage = document.getElementById("noCoursesMessage");
-// const moreInfoButton = document.getElementById("moreInfoBtn");
-
+const filterButtons = document.querySelectorAll(".category-filter");
+const moreInfoButton = document.getElementById("moreInfoBtn");
+const reasonsSection = document.getElementById("reasons-title");
+const playButton = document.querySelector(".btn-play");
+const courseSection = document.getElementById("videoContainer");
 
 if (!searchInput) {
     throw new Error("Course search input was not found.");
 }
 
-searchInput.addEventListener("input", () => {
+if (courseCards.length === 0) {
+    throw new Error("No course cards were found inside #videoContainer.");
+}
+
+if (filterButtons.length === 0) {
+    throw new Error("No category filter buttons were found.");
+}
+
+if (!moreInfoButton || !reasonsSection || !playButton || !courseSection) {
+    throw new Error("A hero button or its scroll target was not found.");
+}
+
+let selectedCategory = "all";
+
+function filterCourses() {
     const searchText = searchInput.value.trim().toLowerCase();
     let visibleCourseCount = 0;
 
     courseCards.forEach((card) => {
-        const courseTitle = card.querySelector("h3").textContent.trim().toLowerCase();
-        const matchesSearch = courseTitle.includes(searchText);
+        const title = card.querySelector("h3");
+        const category = card.dataset.category;
 
-        card.style.display = matchesSearch ? "" : "none";
+        if (!title || !category) {
+            throw new Error("Every course card needs a heading and data-category.");
+        }
 
-        if (matchesSearch) {
+        const matchesSearch = title.textContent.trim().toLowerCase().includes(searchText);
+        const matchesCategory =
+            selectedCategory === "all" || category === selectedCategory;
+        const shouldShow = matchesSearch && matchesCategory;
+
+        card.style.display = shouldShow ? "" : "none";
+
+        if (shouldShow) {
             visibleCourseCount++;
         }
     });
@@ -27,20 +52,46 @@ searchInput.addEventListener("input", () => {
     if (noCoursesMessage) {
         noCoursesMessage.hidden = visibleCourseCount > 0;
     }
+}
+
+searchInput.addEventListener("input", filterCourses);
+
+filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        const category = button.dataset.category;
+
+        if (!category) {
+            throw new Error("Every category filter button needs data-category.");
+        }
+
+        selectedCategory = category;
+
+        filterButtons.forEach((filterButton) => {
+            const isSelected = filterButton === button;
+            filterButton.classList.toggle("active", isSelected);
+            filterButton.setAttribute("aria-pressed", String(isSelected));
+        });
+
+        filterCourses();
+    });
 });
 
-// for the "More Info" button to scroll to the "reasons-title" section
-document.getElementById("moreInfoBtn").addEventListener("click", function () {
-  document.getElementById("reasons-title").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+function scrollToSection(section) {
+    const navbar = document.querySelector(".navbar");
+    const navbarHeight = navbar ? navbar.offsetHeight : 0;
+    const top =
+        window.scrollY + section.getBoundingClientRect().top - navbarHeight - 12;
+
+    window.scrollTo({
+        top: Math.max(0, top),
+        behavior: "smooth"
+    });
+}
+
+moreInfoButton.addEventListener("click", () => {
+    scrollToSection(reasonsSection);
 });
 
-// for lecture play button to scroll to the "videoContainer" section
-document.querySelector(".btn-play").addEventListener("click", function () {
-  document.getElementById("videoContainer").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+playButton.addEventListener("click", () => {
+    scrollToSection(courseSection);
 });
