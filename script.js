@@ -1,7 +1,139 @@
+// Load and validate the course data before wiring controls that depend on course cards.
+const courseContainer = document.getElementById("videoContainer");
+const courseLoadMessage = document.getElementById("courseLoadMessage");
+
+if (!courseContainer || !courseLoadMessage) {
+    throw new Error("The course list or its loading message was not found.");
+}
+
+const availableCategories = new Set(
+    Array.from(document.querySelectorAll(".category-filter"), (button) => button.dataset.category)
+);
+let courses;
+
+// Convert common YouTube share links into a video ID for the embed and thumbnail URLs.
+function getYouTubeVideoId(videoUrl) {
+    let url;
+
+    try {
+        url = new URL(videoUrl);
+    } catch {
+        return "";
+    }
+
+    if (url.protocol !== "https:") {
+        return "";
+    }
+
+    const host = url.hostname.toLowerCase();
+    let videoId = "";
+
+    if (host === "youtu.be") {
+        videoId = url.pathname.split("/").filter(Boolean)[0] || "";
+    } else if (
+        ["youtube.com", "www.youtube.com", "m.youtube.com", "youtube-nocookie.com",
+            "www.youtube-nocookie.com"].includes(host)
+    ) {
+        if (url.pathname === "/watch") {
+            videoId = url.searchParams.get("v") || "";
+        } else {
+            const pathMatch = url.pathname.match(/^\/(?:embed|shorts)\/([^/]+)/);
+            videoId = pathMatch ? pathMatch[1] : "";
+        }
+    }
+
+    return /^[a-zA-Z0-9_-]{11}$/.test(videoId) ? videoId : "";
+}
+
+try {
+    const response = await fetch("./courses.json");
+
+    if (!response.ok) {
+        throw new Error(`Course data request failed with status ${response.status}.`);
+    }
+
+    const courseData = await response.json();
+
+    if (!Array.isArray(courseData) || courseData.length === 0) {
+        throw new Error("Course data must be a non-empty JSON array.");
+    }
+
+    const courseIds = new Set();
+    courseData.forEach((course) => {
+        if (
+            !course ||
+            typeof course.id !== "string" ||
+            !/^[a-z0-9-]+$/.test(course.id) ||
+            courseIds.has(course.id) ||
+            typeof course.title !== "string" ||
+            typeof course.description !== "string" ||
+            typeof course.category !== "string" ||
+            !availableCategories.has(course.category) ||
+            typeof course.duration !== "string" ||
+            typeof course.level !== "string" ||
+            typeof course.instructor !== "string" ||
+            !Array.isArray(course.tags) ||
+            course.tags.length === 0 ||
+            !course.tags.every((tag) => typeof tag === "string") ||
+            typeof course.videoUrl !== "string" ||
+            !getYouTubeVideoId(course.videoUrl)
+        ) {
+            throw new Error("A course in courses.json is missing valid required fields.");
+        }
+
+        courseIds.add(course.id);
+    });
+
+    courses = courseData;
+} catch (error) {
+    courseLoadMessage.hidden = false;
+    courseLoadMessage.textContent =
+        "Course data could not be loaded. Run this project through a local web server (such as VS Code Live Server), then refresh.";
+    throw error;
+}
+
+// Build cards from text-safe DOM nodes so courses.json remains the source of course content.
+function createCourseCard(course) {
+    const card = document.createElement("article");
+    const videoId = getYouTubeVideoId(course.videoUrl);
+    card.className = "video-card";
+    card.dataset.category = course.category;
+    card.dataset.courseId = course.id;
+    card.dataset.description = course.description;
+    card.dataset.level = course.level;
+    card.dataset.instructor = course.instructor;
+    card.dataset.tags = course.tags.join(",");
+
+    const thumbnail = document.createElement("div");
+    thumbnail.className = "video-thumb";
+
+    const image = document.createElement("img");
+    image.className = "poster-img";
+    image.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    image.alt = `${course.title} video thumbnail`;
+    image.loading = "lazy";
+    thumbnail.append(image);
+
+    const details = document.createElement("div");
+    details.className = "video-details";
+
+    const duration = document.createElement("span");
+    duration.className = "video-duration";
+    duration.textContent = course.duration;
+
+    const title = document.createElement("h3");
+    title.textContent = course.title;
+    details.append(duration, title);
+    card.append(thumbnail, details);
+    return card;
+}
+
+courseContainer.replaceChildren(...courses.map(createCourseCard));
+
 // Find the HTML elements that the search, filters, buttons, and course dialog use.
 const searchInput = document.querySelector(".nav-search .search-input");
 const clearSearchButton = document.getElementById("clearSearchButton");
-const courseCards = document.querySelectorAll("#videoContainer .video-card");
+const courseCards = courseContainer.querySelectorAll(".video-card");
 const noCoursesMessage = document.getElementById("noCoursesMessage");
 const filterButtons = document.querySelectorAll(".category-filter");
 const categoryFilters = document.querySelector(".category-filters");
@@ -21,6 +153,8 @@ const dialogCourseDuration = document.getElementById("dialogCourseDuration");
 const dialogCourseLevel = document.getElementById("dialogCourseLevel");
 const dialogCourseInstructor = document.getElementById("dialogCourseInstructor");
 const dialogCourseTags = document.getElementById("dialogCourseTags");
+const watchLessonButton = document.getElementById("watchLessonButton");
+const lessonPlayer = document.getElementById("lessonPlayer");
 const dialogProgressPercent = document.getElementById("dialogProgressPercent");
 const dialogProgressBar = document.getElementById("dialogProgressBar");
 const dialogProgressStatus = document.getElementById("dialogProgressStatus");
@@ -85,6 +219,8 @@ if (
     !dialogCourseLevel ||
     !dialogCourseInstructor ||
     !dialogCourseTags ||
+    !watchLessonButton ||
+    !lessonPlayer ||
     !dialogProgressPercent ||
     !dialogProgressBar ||
     !dialogProgressStatus ||
@@ -652,6 +788,53 @@ function updateSaveCourseButton() {
     saveCourseButton.disabled = !wishlistStorageAvailable;
 }
 
+// Remove the iframe when a lesson stops so YouTube audio cannot continue in a hidden dialog.
+function stopLesson() {
+    lessonPlayer.replaceChildren();
+    lessonPlayer.hidden = true;
+    watchLessonButton.textContent = "Watch lesson";
+    watchLessonButton.setAttribute("aria-expanded", "false");
+}
+
+watchLessonButton.addEventListener("click", () => {
+    const courseId = courseDialog.dataset.courseId;
+    const course = courses.find((item) => item.id === courseId);
+
+    if (!course) {
+        throw new Error("The selected course video could not be found.");
+    }
+
+    if (!lessonPlayer.hidden) {
+        stopLesson();
+        return;
+    }
+
+    const player = document.createElement("iframe");
+    const videoId = getYouTubeVideoId(course.videoUrl);
+
+    if (!videoId) {
+        throw new Error("The selected course has an invalid YouTube URL.");
+    }
+
+    player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    player.title = `${course.title} lesson video`;
+    player.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+    player.referrerPolicy = "origin";
+    player.setAttribute("allowfullscreen", "");
+
+    const fallback = document.createElement("a");
+    fallback.className = "lesson-player-fallback";
+    fallback.href = course.videoUrl;
+    fallback.target = "_blank";
+    fallback.rel = "noopener noreferrer";
+    fallback.textContent = "If the player is blank, watch this lesson on YouTube.";
+
+    lessonPlayer.replaceChildren(player, fallback);
+    lessonPlayer.hidden = false;
+    watchLessonButton.textContent = "Stop lesson";
+    watchLessonButton.setAttribute("aria-expanded", "true");
+});
+
 // Copy one card's data into the shared dialog, then open it.
 function openCourseDialog(card) {
     const title = card.querySelector("h3");
@@ -664,6 +847,7 @@ function openCourseDialog(card) {
         throw new Error("A course card is missing one or more detail attributes.");
     }
 
+    stopLesson();
     dialogCourseTitle.textContent = title.textContent.trim();
     dialogCourseDescription.textContent = card.dataset.description;
     dialogCourseDuration.textContent = duration.textContent.trim();
@@ -801,6 +985,8 @@ courseDialog.addEventListener("click", (event) => {
         courseDialog.close();
     }
 });
+
+courseDialog.addEventListener("close", stopLesson);
 
 // Save the selected course as enrolled in this browser (no server/account required).
 enrollCourseButton.addEventListener("click", () => {
