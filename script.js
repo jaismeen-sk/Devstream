@@ -3,10 +3,15 @@ const searchInput = document.querySelector(".nav-search .search-input");
 const courseCards = document.querySelectorAll("#videoContainer .video-card");
 const noCoursesMessage = document.getElementById("noCoursesMessage");
 const filterButtons = document.querySelectorAll(".category-filter");
+const categoryFilters = document.querySelector(".category-filters");
+const courseListTitle = document.getElementById("courses-title");
 const moreInfoButton = document.getElementById("moreInfoBtn");
-const reasonsSection = document.getElementById("reasons-title");
+const projectOverviewSection = document.getElementById("project-overview");
 const playButton = document.querySelector(".btn-play");
 const courseSection = document.getElementById("videoContainer");
+const browseLink = document.getElementById("browseLink");
+const myListLink = document.getElementById("myListLink");
+const aboutLink = document.getElementById("aboutLink");
 const courseDialog = document.getElementById("courseDialog");
 const closeCourseDialogButton = document.getElementById("closeCourseDialog");
 const dialogCourseTitle = document.getElementById("dialogCourseTitle");
@@ -54,8 +59,16 @@ if (filterButtons.length === 0) {
     throw new Error("No category filter buttons were found.");
 }
 
-if (!moreInfoButton || !reasonsSection || !playButton || !courseSection) {
+if (!categoryFilters || !courseListTitle) {
+    throw new Error("The course filters or course-list heading were not found.");
+}
+
+if (!moreInfoButton || !projectOverviewSection || !playButton || !courseSection) {
     throw new Error("A hero button or its scroll target was not found.");
+}
+
+if (!browseLink || !myListLink || !aboutLink) {
+    throw new Error("A primary navigation link was not found.");
 }
 
 if (
@@ -101,6 +114,7 @@ if (
 }
 
 let selectedCategory = "all";
+let showingSavedCourses = false;
 let courseProgress = {};
 let progressStorageAvailable = true;
 const profileNameStorageKey = "devstream-profile-name";
@@ -249,6 +263,49 @@ profileSavedToggle.addEventListener("click", () => {
     const isExpanded = profileSavedToggle.getAttribute("aria-expanded") === "true";
     profileSavedToggle.setAttribute("aria-expanded", String(!isExpanded));
     profileSavedCourses.hidden = isExpanded;
+});
+
+function updatePrimaryNavigation(activeLink) {
+    [browseLink, myListLink, aboutLink].forEach((link) => {
+        const isActive = link === activeLink;
+        link.classList.toggle("active", isActive);
+
+        if (isActive) {
+            link.setAttribute("aria-current", "page");
+        } else {
+            link.removeAttribute("aria-current");
+        }
+    });
+}
+
+// My List switches the course browser to saved items only; Browse restores the catalog.
+browseLink.addEventListener("click", () => {
+    showingSavedCourses = false;
+    categoryFilters.hidden = false;
+    courseListTitle.textContent = "Explore the course library";
+    updatePrimaryNavigation(browseLink);
+    filterCourses();
+});
+
+myListLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    showingSavedCourses = true;
+    selectedCategory = "all";
+    searchInput.value = "";
+    categoryFilters.hidden = true;
+    courseListTitle.textContent = "Your saved courses";
+    filterButtons.forEach((button) => {
+        const isSelected = button.dataset.category === "all";
+        button.classList.toggle("active", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+    });
+    updatePrimaryNavigation(myListLink);
+    filterCourses();
+    scrollToSection(document.getElementById("courses"));
+});
+
+aboutLink.addEventListener("click", () => {
+    updatePrimaryNavigation(aboutLink);
 });
 
 // Restore the learner's preference for showing or hiding their streak.
@@ -489,7 +546,9 @@ function filterCourses() {
         const matchesSearch = title.textContent.trim().toLowerCase().includes(searchText);
         const matchesCategory =
             selectedCategory === "all" || category === selectedCategory;
-        const shouldShow = matchesSearch && matchesCategory;
+        const isSavedCourse = savedCourseIds.has(card.dataset.courseId);
+        const matchesSavedList = !showingSavedCourses || isSavedCourse;
+        const shouldShow = matchesSearch && matchesCategory && matchesSavedList;
 
         card.style.display = shouldShow ? "" : "none";
 
@@ -500,6 +559,15 @@ function filterCourses() {
 
     if (noCoursesMessage) {
         noCoursesMessage.hidden = visibleCourseCount > 0;
+
+        if (showingSavedCourses && savedCourseIds.size === 0) {
+            noCoursesMessage.textContent =
+                "Your list is empty. Open a course and select Save course to add it here.";
+        } else {
+            noCoursesMessage.textContent = showingSavedCourses
+                ? "No saved courses match your search."
+                : "No courses match your search.";
+        }
     }
 }
 
@@ -538,9 +606,9 @@ function scrollToSection(section) {
     });
 }
 
-// These hero buttons scroll to the course list and the reasons section.
+// Hero buttons take visitors to real sections instead of pretending to play a video.
 moreInfoButton.addEventListener("click", () => {
-    scrollToSection(reasonsSection);
+    scrollToSection(projectOverviewSection);
 });
 
 playButton.addEventListener("click", () => {
@@ -641,6 +709,7 @@ function toggleSavedCourse(courseId) {
     savedCourseIds = nextSavedCourseIds;
     updateSaveCourseButton();
     updateSavedCourses();
+    filterCourses();
     return true;
 }
 
