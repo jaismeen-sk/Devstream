@@ -354,6 +354,48 @@ body {
     line-height: 1.6;
 }
 
+.btn-watch {
+    margin-top: 18px;
+    color: #0b0c11;
+    background: #00d2ff;
+}
+
+.lesson-player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-top: 16px;
+    overflow: hidden;
+    background: #000000;
+    border-radius: 8px;
+}
+
+.lesson-player iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.lesson-player-fallback {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 1;
+    padding: 7px 10px;
+    color: #ffffff;
+    background: rgba(11, 12, 17, 0.9);
+    border-radius: 4px;
+    font-size: 12px;
+    text-decoration: underline;
+}
+
+.lesson-player-fallback:focus-visible {
+    outline: 2px solid #00d2ff;
+    outline-offset: 2px;
+}
+
 /* Arrange duration, level, and instructor in three columns on wider screens. */
 .course-dialog-meta {
     display: grid;
@@ -1081,13 +1123,15 @@ body {
     border: none;
 }
 
-/* Keep the custom clear control as the only visible search-clear button. */
-.search-input::-webkit-search-cancel-button,
-.search-input::-moz-search-clear,
-.search-input::-ms-clear {
+/* Hide native clear controls so only the accessible custom button is shown. */
+.search-input::-webkit-search-cancel-button {
     display: none;
     -webkit-appearance: none;
     appearance: none;
+}
+
+.search-input::-ms-clear {
+    display: none;
 }
 
 .search-clear {

@@ -1,0 +1,90 @@
+[
+  {
+    "id": "modern-javascript",
+    "title": "Learn JavaScript",
+    "description": "Learn JavaScript fundamentals and use them to build interactive web experiences.",
+    "category": "javascript",
+    "duration": "Full course",
+    "level": "Beginner",
+    "instructor": "freeCodeCamp.org",
+    "tags": ["JavaScript", "Programming", "Fundamentals"],
+    "videoUrl": "https://www.youtube.com/watch?v=PkZNo7MFNFg"
+  },
+  {
+    "id": "react-components",
+    "title": "React Course",
+    "description": "Learn the React JavaScript library and build interfaces with reusable components.",
+    "category": "frameworks",
+    "duration": "Full course",
+    "level": "Beginner",
+    "instructor": "freeCodeCamp.org",
+    "tags": ["React", "Components", "JavaScript"],
+    "videoUrl": "https://www.youtube.com/watch?v=bMknfKXIFA8"
+  },
+  {
+    "id": "database-design",
+    "title": "SQL Database Course",
+    "description": "Learn SQL and the fundamentals of querying and working with relational databases.",
+    "category": "backend",
+    "duration": "Full course",
+    "level": "Beginner",
+    "instructor": "freeCodeCamp.org",
+    "tags": ["SQL", "Database", "Queries"],
+    "videoUrl": "https://www.youtube.com/watch?v=HXV3zeQKqGY"
+  },
+  {
+    "id": "nextjs-frameworks",
+    "title": "Next.js for Beginners",
+    "description": "Get introduced to Next.js and the framework features used to build web applications.",
+    "category": "frameworks",
+    "duration": "Full course",
+    "level": "Beginner",
+    "instructor": "Programming with Mosh",
+    "tags": ["Next.js", "React", "Frameworks"],
+    "videoUrl": "https://www.youtube.com/watch?v=ZVnjOPwW4ZA"
+  },
+  {
+    "id": "cloud-devops",
+    "title": "Git and GitHub for Beginners",
+    "description": "Learn version control with Git and collaborate on code using GitHub.",
+    "category": "foundations",
+    "duration": "Crash course",
+    "level": "Beginner",
+    "instructor": "freeCodeCamp.org",
+    "tags": ["Git", "GitHub", "Version Control"],
+    "videoUrl": "https://www.youtube.com/watch?v=RGOj5yH7evk"
+  },
+  {
+    "id": "build-for-the-web",
+    "title": "HTML for Beginners",
+    "description": "Learn the structure of web pages with this HTML crash course for beginners.",
+    "category": "foundations",
+    "duration": "Crash course",
+    "level": "Beginner",
+    "instructor": "Traversy Media",
+    "tags": ["HTML", "Semantic Markup", "Web"],
+    "videoUrl": "https://www.youtube.com/watch?v=UB1O30fR-EE"
+  },
+  {
+    "id": "programming-foundations",
+    "title": "CSS for Beginners",
+    "description": "Learn CSS fundamentals for styling and laying out responsive web pages.",
+    "category": "foundations",
+    "duration": "Crash course",
+    "level": "Beginner",
+    "instructor": "Traversy Media",
+    "tags": ["CSS", "Styling", "Responsive Design"],
+    "videoUrl": "https://www.youtube.com/watch?v=yfoY53QXEnI"
+  },
+  {
+    "id": "cloud-engineering",
+    "title": "Node.js Crash Course",
+    "description": "Explore Node.js and learn how JavaScript can be used to build server-side applications.",
+    "category": "backend",
+    "duration": "Crash course",
+    "level": "Beginner",
+    "instructor": "Traversy Media",
+    "tags": ["Node.js", "JavaScript", "Backend"],
+    "videoUrl": "https://www.youtube.com/watch?v=fBNz5xF-Kx4"
+  }
+]
