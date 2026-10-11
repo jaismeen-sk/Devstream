@@ -3,10 +3,15 @@ const searchInput = document.querySelector(".nav-search .search-input");
 const courseCards = document.querySelectorAll("#videoContainer .video-card");
 const noCoursesMessage = document.getElementById("noCoursesMessage");
 const filterButtons = document.querySelectorAll(".category-filter");
+const categoryFilters = document.querySelector(".category-filters");
+const courseListTitle = document.getElementById("courses-title");
 const moreInfoButton = document.getElementById("moreInfoBtn");
-const reasonsSection = document.getElementById("reasons-title");
+const projectOverviewSection = document.getElementById("project-overview");
 const playButton = document.querySelector(".btn-play");
 const courseSection = document.getElementById("videoContainer");
+const browseLink = document.getElementById("browseLink");
+const myListLink = document.getElementById("myListLink");
+const aboutLink = document.getElementById("aboutLink");
 const courseDialog = document.getElementById("courseDialog");
 const closeCourseDialogButton = document.getElementById("closeCourseDialog");
 const dialogCourseTitle = document.getElementById("dialogCourseTitle");
@@ -34,6 +39,10 @@ const saveProfileButton = document.getElementById("saveProfileButton");
 const profileStreak = document.getElementById("profileStreak");
 const profileStreakStat = document.getElementById("profileStreakStat");
 const profileSavedCount = document.getElementById("profileSavedCount");
+const profileSavedToggle = document.getElementById("profileSavedToggle");
+const profileSavedCourses = document.getElementById("profileSavedCourses");
+const profileSavedEmpty = document.getElementById("profileSavedEmpty");
+const profileSavedList = document.getElementById("profileSavedList");
 const profileMessage = document.getElementById("profileMessage");
 const showStreakToggle = document.getElementById("showStreakToggle");
 
@@ -50,8 +59,16 @@ if (filterButtons.length === 0) {
     throw new Error("No category filter buttons were found.");
 }
 
-if (!moreInfoButton || !reasonsSection || !playButton || !courseSection) {
+if (!categoryFilters || !courseListTitle) {
+    throw new Error("The course filters or course-list heading were not found.");
+}
+
+if (!moreInfoButton || !projectOverviewSection || !playButton || !courseSection) {
     throw new Error("A hero button or its scroll target was not found.");
+}
+
+if (!browseLink || !myListLink || !aboutLink) {
+    throw new Error("A primary navigation link was not found.");
 }
 
 if (
@@ -86,6 +103,10 @@ if (
     !profileStreak ||
     !profileStreakStat ||
     !profileSavedCount ||
+    !profileSavedToggle ||
+    !profileSavedCourses ||
+    !profileSavedEmpty ||
+    !profileSavedList ||
     !profileMessage ||
     !showStreakToggle
 ) {
@@ -93,6 +114,7 @@ if (
 }
 
 let selectedCategory = "all";
+let showingSavedCourses = false;
 let courseProgress = {};
 let progressStorageAvailable = true;
 const profileNameStorageKey = "devstream-profile-name";
@@ -180,12 +202,111 @@ try {
     wishlistMessage.textContent = "Saved courses could not be read from browser storage.";
 }
 
-// Display the number of different courses saved to the wishlist.
-function updateSavedCourseCount() {
-    profileSavedCount.textContent = String(savedCourseIds.size);
+// Keep the profile list in sync so removing a saved course immediately hides it.
+function updateSavedCourses() {
+    profileSavedCount.textContent = wishlistStorageAvailable
+        ? String(savedCourseIds.size)
+        : "—";
+    profileSavedList.replaceChildren();
+
+    courseCards.forEach((card) => {
+        const courseId = card.dataset.courseId;
+
+        if (!courseId || !savedCourseIds.has(courseId)) {
+            return;
+        }
+
+        const title = card.querySelector("h3");
+
+        if (!title) {
+            throw new Error("Every saved course needs a title.");
+        }
+
+        const item = document.createElement("li");
+        item.className = "profile-saved-item";
+
+        const openButton = document.createElement("button");
+        openButton.className = "profile-saved-course";
+        openButton.type = "button";
+        openButton.textContent = title.textContent.trim();
+        openButton.addEventListener("click", () => openCourseDialog(card));
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "profile-remove-course";
+        removeButton.type = "button";
+        removeButton.textContent = "Remove";
+        removeButton.setAttribute(
+            "aria-label",
+            `Remove ${title.textContent.trim()} from saved courses`
+        );
+        removeButton.disabled = !wishlistStorageAvailable;
+        removeButton.addEventListener("click", () => {
+            if (toggleSavedCourse(courseId)) {
+                profileMessage.textContent =
+                    `${title.textContent.trim()} was removed from saved courses.`;
+            }
+        });
+
+        item.append(openButton, removeButton);
+        profileSavedList.append(item);
+    });
+
+    profileSavedEmpty.hidden = profileSavedList.childElementCount > 0;
+    profileSavedEmpty.textContent = wishlistStorageAvailable
+        ? "No saved courses yet."
+        : "Saved courses are unavailable.";
 }
 
-updateSavedCourseCount();
+updateSavedCourses();
+
+profileSavedToggle.addEventListener("click", () => {
+    const isExpanded = profileSavedToggle.getAttribute("aria-expanded") === "true";
+    profileSavedToggle.setAttribute("aria-expanded", String(!isExpanded));
+    profileSavedCourses.hidden = isExpanded;
+});
+
+function updatePrimaryNavigation(activeLink) {
+    [browseLink, myListLink, aboutLink].forEach((link) => {
+        const isActive = link === activeLink;
+        link.classList.toggle("active", isActive);
+
+        if (isActive) {
+            link.setAttribute("aria-current", "page");
+        } else {
+            link.removeAttribute("aria-current");
+        }
+    });
+}
+
+// My List switches the course browser to saved items only; Browse restores the catalog.
+browseLink.addEventListener("click", () => {
+    showingSavedCourses = false;
+    categoryFilters.hidden = false;
+    courseListTitle.textContent = "Explore the course library";
+    updatePrimaryNavigation(browseLink);
+    filterCourses();
+});
+
+myListLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    showingSavedCourses = true;
+    selectedCategory = "all";
+    searchInput.value = "";
+    categoryFilters.hidden = true;
+    courseListTitle.textContent = "Your saved courses";
+    filterButtons.forEach((button) => {
+        const isSelected = button.dataset.category === "all";
+        button.classList.toggle("active", isSelected);
+        button.setAttribute("aria-pressed", String(isSelected));
+    });
+    updatePrimaryNavigation(myListLink);
+    filterCourses();
+    scrollToSection(document.getElementById("courses"));
+});
+
+aboutLink.addEventListener("click", () => {
+    updatePrimaryNavigation(aboutLink);
+});
 
 // Restore the learner's preference for showing or hiding their streak.
 try {
@@ -425,7 +546,9 @@ function filterCourses() {
         const matchesSearch = title.textContent.trim().toLowerCase().includes(searchText);
         const matchesCategory =
             selectedCategory === "all" || category === selectedCategory;
-        const shouldShow = matchesSearch && matchesCategory;
+        const isSavedCourse = savedCourseIds.has(card.dataset.courseId);
+        const matchesSavedList = !showingSavedCourses || isSavedCourse;
+        const shouldShow = matchesSearch && matchesCategory && matchesSavedList;
 
         card.style.display = shouldShow ? "" : "none";
 
@@ -436,6 +559,15 @@ function filterCourses() {
 
     if (noCoursesMessage) {
         noCoursesMessage.hidden = visibleCourseCount > 0;
+
+        if (showingSavedCourses && savedCourseIds.size === 0) {
+            noCoursesMessage.textContent =
+                "Your list is empty. Open a course and select Save course to add it here.";
+        } else {
+            noCoursesMessage.textContent = showingSavedCourses
+                ? "No saved courses match your search."
+                : "No courses match your search.";
+        }
     }
 }
 
@@ -474,9 +606,9 @@ function scrollToSection(section) {
     });
 }
 
-// These hero buttons scroll to the course list and the reasons section.
+// Hero buttons take visitors to real sections instead of pretending to play a video.
 moreInfoButton.addEventListener("click", () => {
-    scrollToSection(reasonsSection);
+    scrollToSection(projectOverviewSection);
 });
 
 playButton.addEventListener("click", () => {
@@ -550,14 +682,8 @@ function openCourseDialog(card) {
     courseDialog.showModal();
 }
 
-// Add or remove this course from the browser's saved wishlist.
-saveCourseButton.addEventListener("click", () => {
-    const courseId = courseDialog.dataset.courseId;
-
-    if (!courseId) {
-        throw new Error("No course is selected to save.");
-    }
-
+// Persist a saved-state change before updating either the profile or course dialog.
+function toggleSavedCourse(courseId) {
     const nextSavedCourseIds = new Set(savedCourseIds);
 
     if (nextSavedCourseIds.has(courseId)) {
@@ -576,15 +702,32 @@ saveCourseButton.addEventListener("click", () => {
         saveCourseButton.disabled = true;
         wishlistMessage.textContent =
             "Could not save this course. Browser storage may be blocked.";
-        return;
+        updateSavedCourses();
+        return false;
     }
 
     savedCourseIds = nextSavedCourseIds;
+    updateSaveCourseButton();
+    updateSavedCourses();
+    filterCourses();
+    return true;
+}
+
+// Add or remove this course from the browser's saved wishlist.
+saveCourseButton.addEventListener("click", () => {
+    const courseId = courseDialog.dataset.courseId;
+
+    if (!courseId) {
+        throw new Error("No course is selected to save.");
+    }
+
+    if (!toggleSavedCourse(courseId)) {
+        return;
+    }
+
     wishlistMessage.textContent = savedCourseIds.has(courseId)
         ? "Course saved to your wishlist."
         : "Course removed from your wishlist.";
-    updateSaveCourseButton();
-    updateSavedCourseCount();
 });
 
 // Make each course card open the dialog with mouse, Enter, or Space.

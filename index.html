@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevStream - Flexbox Streaming Portal</title>
+    <meta name="description" content="DevStream is a responsive front-end learning dashboard built with HTML, CSS, and vanilla JavaScript.">
+    <title>DevStream | Front-End Learning Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="top">
 
     <!-- Main Navigation Bar Using Flexbox -->
     <nav class="navbar">
         <div class="logo-container">
             <!-- DevStream Custom SVG Icon Symbol -->
-            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://w3.org">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Play triangle icon -->
                 <path d="M25,25 L60,50 L25,75 Z" fill="none" stroke="url(#brandGradient)" stroke-width="8" stroke-linejoin="round"/>
                 <!-- Chevron bracket > icon -->
@@ -28,22 +29,22 @@
             </svg>
             <span class="logo-text">DevStream</span>
         </div>
-        <!-- JavaScript reads this input to search course titles. -->
+        <!-- The accessible label names the search field; JavaScript filters the course cards. -->
         <div class="nav-search">
-           <input placeholder="   Search by course name..." class="search-input">
-            <p id="noCoursesMessage" class="search-empty" hidden>No courses match your search.</p>
-                <div class="search-icon">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>   
+            <label class="visually-hidden" for="courseSearch">Search courses</label>
+            <input id="courseSearch" type="search" placeholder="Search courses..."
+                class="search-input" autocomplete="off">
+            <span class="search-icon" aria-hidden="true">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
         </div>
         
         <ul class="nav-links">
-            <li><a href="#" class="active">Browse</a></li>
-            <li><a href="#">My List</a></li>
-            <li><a href="#">Top Courses</a></li>
+            <li><a href="#courses" class="active" id="browseLink" aria-current="page">Browse</a></li>
+            <li><a href="#courses" id="myListLink">My List</a></li>
+            <li><a href="#project-overview" id="aboutLink">About</a></li>
         </ul>
 
-        <!-- <div class="profile-box">JS</div> -->
         <details class="profile-menu">
             <!-- JavaScript replaces these initials with the learner's saved initials. -->
             <summary class="profile-box" id="profileAvatar" aria-label="Open profile menu">DL</summary>
@@ -59,9 +60,16 @@
                             <strong id="profileStreak">0 days</strong>
                         </p>
                         <p>
-                            <span>Saved courses</span>
-                            <strong id="profileSavedCount">0</strong>
+                            <button class="profile-saved-toggle" id="profileSavedToggle"
+                                type="button" aria-expanded="false" aria-controls="profileSavedCourses">
+                                <span>Saved courses</span>
+                                <strong id="profileSavedCount">0</strong>
+                            </button>
                         </p>
+                    </div>
+                    <div class="profile-saved-courses" id="profileSavedCourses" hidden>
+                        <p class="profile-saved-empty" id="profileSavedEmpty">No saved courses yet.</p>
+                        <ul class="profile-saved-list" id="profileSavedList"></ul>
                     </div>
                     <p class="profile-message" id="profileMessage" role="status" aria-live="polite"></p>
                 </section>
@@ -88,23 +96,25 @@
     <!-- Main Content wrapper -->
     <main class="viewport-wrapper">
         
-        <!-- Hero Video Section -->
+        <!-- The hero introduces the project and sends visitors to the working course browser. -->
         <header class="hero-banner">
             <div class="hero-content">
-                <h1 class="hero-title">Next-Gen UI & AI Product Engineering.</h1>
-                <p class="hero-desc">Build lightning-fast, visually stunning web applications. Learn to integrate intelligent generative AI systems directly into interactive, user-focused web interfaces.</p>
+                <p class="hero-eyebrow">A vanilla JavaScript front-end project</p>
+                <h1 class="hero-title">A learning dashboard, built from scratch.</h1>
+                <p class="hero-desc">Explore a responsive course library with search, filters, saved courses, and learning progress—all built with HTML, CSS, and JavaScript.</p>
                 <div class="hero-buttons">
-                    <button class="btn btn-play">▶ Play Lecture</button>
-                    <!-- <button class="btn btn-info">ⓘ More Info</button> -->
-                    <button class="btn btn-info" id="moreInfoBtn">ⓘ More Info</button>
-                    <!-- <a href="#reasons-title" class="btn btn-info">ⓘ More Info</a> -->
+                    <button class="btn btn-play" type="button">Browse courses</button>
+                    <button class="btn btn-info" id="moreInfoBtn" type="button">About this project</button>
                 </div>
             </div>
         </header>
 
-        <!-- Horizontal Video Queue Container -->
-        <section class="video-section">
-            <h2 class="section-title">Trending Web Development Modules</h2>
+        <!-- Search and category buttons filter this course collection in script.js. -->
+        <section class="video-section" id="courses" aria-labelledby="courses-title">
+            <h2 class="section-title" id="courses-title">Explore the course library</h2>
+            <p id="noCoursesMessage" class="search-empty" role="status" aria-live="polite" hidden>
+                No courses match your search.
+            </p>
 
             <!-- Each button's data-category must match the category on a course card. -->
             <div class="category-filters" aria-label="Filter courses by category">
@@ -227,7 +237,7 @@
 
         </section>
 
-        <!-- JavaScript fills this native dialog with details from the course card clicked. -->
+        <!-- JavaScript fills this native dialog with details from the selected course card. -->
         <dialog class="course-dialog" id="courseDialog" aria-labelledby="dialogCourseTitle">
             <div class="course-dialog-content">
                 <button class="course-dialog-close" id="closeCourseDialog" type="button"
@@ -254,7 +264,7 @@
                     <h3 class="course-dialog-tags-title">Topics</h3>
                     <ul class="course-dialog-tags" id="dialogCourseTags"></ul>
                 </div>
-                <!-- These controls simulate lesson progress for this frontend-only demo. -->
+                <!-- Progress is a local-only demo interaction; no lesson video or account is connected. -->
                 <section class="course-progress-panel" aria-label="Learning progress">
                     <div class="course-progress-heading">
                         <h3>Learning progress</h3>
@@ -280,13 +290,29 @@
                     <p class="wishlist-message" id="wishlistMessage"
                         role="status" aria-live="polite"></p>
                 </section>
-                <!-- Enrollment is a frontend demo saved in this browser's localStorage. -->
+                <!-- Enrollment is a local-only demo saved in this browser, not a real registration. -->
                 <div class="course-dialog-actions">
                     <button class="btn btn-enroll" id="enrollCourseBtn" type="button">Enroll</button>
                     <p id="enrollmentMessage" role="status" aria-live="polite"></p>
                 </div>
             </div>
         </dialog>
+
+        <section class="project-overview" id="project-overview" aria-labelledby="project-overview-title">
+            <p class="project-overview-eyebrow">About the project</p>
+            <h2 class="section-title" id="project-overview-title">A practical front-end portfolio project</h2>
+            <p>
+                I built DevStream to make a growing course library easier to browse and keep track of.
+                Search and category filters help learners find a course; the course dialog keeps extra
+                details out of the way until they are needed; and the profile makes saved courses and
+                progress easy to revisit. I built these interactions with semantic HTML, responsive
+                CSS, and vanilla JavaScript, without a framework or backend.
+            </p>
+            <p class="project-demo-note">
+                This is a front-end demo: course content, enrollment, saved courses, and progress are
+                sample experiences stored in this browser. There is no backend or real course video.
+            </p>
+        </section>
 
         <!-- This section is the destination of the hero's More Info button. -->
         <section class="reasons-section" aria-labelledby="reasons-title">
@@ -323,57 +349,21 @@
             </div>
         </section>
     </main>
-    <!-- Footer navigation and contact links. -->
+    <!-- Keep footer links within the working sections of this single-page demo. -->
     <footer class="site-footer">
-    <div class="footer-content">
-        <div class="footer-brand">
-            <span class="logo-text">DevStream</span>
-            <p>Learn, build, and grow your development skills.</p>
-        </div>
-
-        <nav class="footer-links" aria-label="Footer navigation">
-            <div>
-                <h2>Explore</h2>
-                <a href="index.html">Home</a>
-                <a href="#videoContainer">Courses</a>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="logo-text">DevStream</span>
+                <p>A front-end demo made with HTML, CSS, and JavaScript.</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer navigation">
+                <a href="#top">Home</a>
+                <a href="#courses">Courses</a>
+                <a href="#project-overview">About the project</a>
                 <a href="#reasons-title">Why DevStream</a>
-                <a href="#">Tutorials</a>
-                <a href="#">About</a>
-            </div>
-
-            <div>
-                <h2>Connect</h2>
-                <a href="mailto:hello@example.com">Email us</a>
-                <a href="https://github.com/your-username"
-                   target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://www.linkedin.com/"
-                   target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="https://twitter.com/your-username"
-                   target="_blank" rel="noopener noreferrer">Twitter</a>
-                <a href="https://discord.gg/your-username"
-                   target="_blank" rel="noopener noreferrer">Discord</a>
-            </div>
-            <div>
-                <h2>Legal</h2>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Cookie Policy</a>
-                <a href="#">Accessibility</a>
-            </div>
-            <div>
-                <h2>Resources</h2>
-                <a href="#">Blog</a>
-                <a href="#">Documentation</a>
-                <a href="#">Support</a>
-                <a href="#">Community Forum</a>
-
-            </div>
-        </nav>
-    </div>
-    <div>
-    
-
-    <p class="footer-bottom">&copy; 2026 DevStream. All rights reserved.</p>
+            </nav>
+        </div>
+        <p class="footer-bottom">&copy; 2026 DevStream. Front-end learning project.</p>
     </footer>
 
 
