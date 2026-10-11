@@ -922,8 +922,96 @@ left side footer content
     font-size: 13px;
 }
 
+.profile-saved-toggle {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.profile-saved-toggle:hover,
+.profile-saved-toggle:focus-visible {
+    color: #00d2ff;
+}
+
+.profile-saved-toggle:focus-visible,
+.profile-saved-course:focus-visible,
+.profile-remove-course:focus-visible {
+    outline: 2px solid #00d2ff;
+    outline-offset: 2px;
+}
+
 .profile-stats strong {
     color: #ffffff;
+}
+
+.profile-saved-courses {
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-saved-empty {
+    padding: 10px 0;
+    color: #aeb2c2;
+    font-size: 12px;
+}
+
+.profile-saved-list {
+    display: grid;
+    gap: 4px;
+    padding: 8px 0 0;
+    list-style: none;
+}
+
+.profile-saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.profile-saved-course,
+.profile-remove-course {
+    padding: 6px;
+    color: #e5e5e5;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.profile-saved-course {
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-saved-course:hover,
+.profile-remove-course:hover {
+    color: #00d2ff;
+    background: #242633;
+}
+
+.profile-remove-course {
+    flex: 0 0 auto;
+    color: #c4c7d5;
+    font-size: 12px;
+}
+
+.profile-remove-course:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 
 .profile-message {

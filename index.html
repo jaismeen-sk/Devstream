@@ -59,9 +59,16 @@
                             <strong id="profileStreak">0 days</strong>
                         </p>
                         <p>
-                            <span>Saved courses</span>
-                            <strong id="profileSavedCount">0</strong>
+                            <button class="profile-saved-toggle" id="profileSavedToggle"
+                                type="button" aria-expanded="false" aria-controls="profileSavedCourses">
+                                <span>Saved courses</span>
+                                <strong id="profileSavedCount">0</strong>
+                            </button>
                         </p>
+                    </div>
+                    <div class="profile-saved-courses" id="profileSavedCourses" hidden>
+                        <p class="profile-saved-empty" id="profileSavedEmpty">No saved courses yet.</p>
+                        <ul class="profile-saved-list" id="profileSavedList"></ul>
                     </div>
                     <p class="profile-message" id="profileMessage" role="status" aria-live="polite"></p>
                 </section>

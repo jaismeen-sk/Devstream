@@ -34,6 +34,10 @@ const saveProfileButton = document.getElementById("saveProfileButton");
 const profileStreak = document.getElementById("profileStreak");
 const profileStreakStat = document.getElementById("profileStreakStat");
 const profileSavedCount = document.getElementById("profileSavedCount");
+const profileSavedToggle = document.getElementById("profileSavedToggle");
+const profileSavedCourses = document.getElementById("profileSavedCourses");
+const profileSavedEmpty = document.getElementById("profileSavedEmpty");
+const profileSavedList = document.getElementById("profileSavedList");
 const profileMessage = document.getElementById("profileMessage");
 const showStreakToggle = document.getElementById("showStreakToggle");
 
@@ -86,6 +90,10 @@ if (
     !profileStreak ||
     !profileStreakStat ||
     !profileSavedCount ||
+    !profileSavedToggle ||
+    !profileSavedCourses ||
+    !profileSavedEmpty ||
+    !profileSavedList ||
     !profileMessage ||
     !showStreakToggle
 ) {
@@ -180,12 +188,68 @@ try {
     wishlistMessage.textContent = "Saved courses could not be read from browser storage.";
 }
 
-// Display the number of different courses saved to the wishlist.
-function updateSavedCourseCount() {
-    profileSavedCount.textContent = String(savedCourseIds.size);
+// Keep the profile list in sync so removing a saved course immediately hides it.
+function updateSavedCourses() {
+    profileSavedCount.textContent = wishlistStorageAvailable
+        ? String(savedCourseIds.size)
+        : "—";
+    profileSavedList.replaceChildren();
+
+    courseCards.forEach((card) => {
+        const courseId = card.dataset.courseId;
+
+        if (!courseId || !savedCourseIds.has(courseId)) {
+            return;
+        }
+
+        const title = card.querySelector("h3");
+
+        if (!title) {
+            throw new Error("Every saved course needs a title.");
+        }
+
+        const item = document.createElement("li");
+        item.className = "profile-saved-item";
+
+        const openButton = document.createElement("button");
+        openButton.className = "profile-saved-course";
+        openButton.type = "button";
+        openButton.textContent = title.textContent.trim();
+        openButton.addEventListener("click", () => openCourseDialog(card));
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "profile-remove-course";
+        removeButton.type = "button";
+        removeButton.textContent = "Remove";
+        removeButton.setAttribute(
+            "aria-label",
+            `Remove ${title.textContent.trim()} from saved courses`
+        );
+        removeButton.disabled = !wishlistStorageAvailable;
+        removeButton.addEventListener("click", () => {
+            if (toggleSavedCourse(courseId)) {
+                profileMessage.textContent =
+                    `${title.textContent.trim()} was removed from saved courses.`;
+            }
+        });
+
+        item.append(openButton, removeButton);
+        profileSavedList.append(item);
+    });
+
+    profileSavedEmpty.hidden = profileSavedList.childElementCount > 0;
+    profileSavedEmpty.textContent = wishlistStorageAvailable
+        ? "No saved courses yet."
+        : "Saved courses are unavailable.";
 }
 
-updateSavedCourseCount();
+updateSavedCourses();
+
+profileSavedToggle.addEventListener("click", () => {
+    const isExpanded = profileSavedToggle.getAttribute("aria-expanded") === "true";
+    profileSavedToggle.setAttribute("aria-expanded", String(!isExpanded));
+    profileSavedCourses.hidden = isExpanded;
+});
 
 // Restore the learner's preference for showing or hiding their streak.
 try {
@@ -550,14 +614,8 @@ function openCourseDialog(card) {
     courseDialog.showModal();
 }
 
-// Add or remove this course from the browser's saved wishlist.
-saveCourseButton.addEventListener("click", () => {
-    const courseId = courseDialog.dataset.courseId;
-
-    if (!courseId) {
-        throw new Error("No course is selected to save.");
-    }
-
+// Persist a saved-state change before updating either the profile or course dialog.
+function toggleSavedCourse(courseId) {
     const nextSavedCourseIds = new Set(savedCourseIds);
 
     if (nextSavedCourseIds.has(courseId)) {
@@ -576,15 +634,31 @@ saveCourseButton.addEventListener("click", () => {
         saveCourseButton.disabled = true;
         wishlistMessage.textContent =
             "Could not save this course. Browser storage may be blocked.";
-        return;
+        updateSavedCourses();
+        return false;
     }
 
     savedCourseIds = nextSavedCourseIds;
+    updateSaveCourseButton();
+    updateSavedCourses();
+    return true;
+}
+
+// Add or remove this course from the browser's saved wishlist.
+saveCourseButton.addEventListener("click", () => {
+    const courseId = courseDialog.dataset.courseId;
+
+    if (!courseId) {
+        throw new Error("No course is selected to save.");
+    }
+
+    if (!toggleSavedCourse(courseId)) {
+        return;
+    }
+
     wishlistMessage.textContent = savedCourseIds.has(courseId)
         ? "Course saved to your wishlist."
         : "Course removed from your wishlist.";
-    updateSaveCourseButton();
-    updateSavedCourseCount();
 });
 
 // Make each course card open the dialog with mouse, Enter, or Space.
