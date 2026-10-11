@@ -1,5 +1,6 @@
 // Find the HTML elements that the search, filters, buttons, and course dialog use.
 const searchInput = document.querySelector(".nav-search .search-input");
+const clearSearchButton = document.getElementById("clearSearchButton");
 const courseCards = document.querySelectorAll("#videoContainer .video-card");
 const noCoursesMessage = document.getElementById("noCoursesMessage");
 const filterButtons = document.querySelectorAll(".category-filter");
@@ -49,6 +50,10 @@ const showStreakToggle = document.getElementById("showStreakToggle");
 // Fail early with a useful message if required HTML elements were renamed or removed.
 if (!searchInput) {
     throw new Error("Course search input was not found.");
+}
+
+if (!clearSearchButton) {
+    throw new Error("The clear-search button was not found.");
 }
 
 if (courseCards.length === 0) {
@@ -292,6 +297,7 @@ myListLink.addEventListener("click", (event) => {
     showingSavedCourses = true;
     selectedCategory = "all";
     searchInput.value = "";
+    clearSearchButton.hidden = true;
     categoryFilters.hidden = true;
     courseListTitle.textContent = "Your saved courses";
     filterButtons.forEach((button) => {
@@ -571,7 +577,18 @@ function filterCourses() {
     }
 }
 
-searchInput.addEventListener("input", filterCourses);
+// Keep the visible clear button in sync with search input and filtering.
+searchInput.addEventListener("input", () => {
+    clearSearchButton.hidden = searchInput.value.length === 0;
+    filterCourses();
+});
+
+clearSearchButton.addEventListener("click", () => {
+    searchInput.value = "";
+    clearSearchButton.hidden = true;
+    filterCourses();
+    searchInput.focus();
+});
 
 // Remember which category was clicked, update its visual/accessibility state, then filter.
 filterButtons.forEach((button) => {
