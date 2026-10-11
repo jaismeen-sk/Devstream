@@ -575,10 +575,21 @@ body {
 }
 
 .course-progress-actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
     margin-top: 14px;
+}
+
+.course-progress-actions .btn-progress {
+    grid-column: 1 / -1;
+}
+
+.course-progress-actions .btn-complete,
+.course-progress-actions .btn-save-course {
+    min-width: 0;
+    padding-right: 12px;
+    padding-left: 12px;
 }
 
 .btn-progress {
@@ -591,11 +602,50 @@ body {
     background: #34384d;
 }
 
+.btn-save-course {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #ffffff;
+    background: #25283a;
+    border: 1px solid #4a4e62;
+}
+
+.btn-save-course[aria-pressed="true"] {
+    color: #8beaff;
+    border-color: #00d2ff;
+}
+
+.btn-save-course:hover,
+.btn-save-course:focus-visible {
+    background: #34384d;
+}
+
+.btn-save-course:disabled,
 .btn-progress:disabled,
 .btn-complete:disabled {
     cursor: not-allowed;
     opacity: 0.55;
     transform: none;
+}
+
+/* On very narrow phones, stack the actions to keep their labels readable. */
+@media (max-width: 360px) {
+    .course-progress-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .course-progress-actions .btn-progress {
+        grid-column: auto;
+    }
+}
+
+.wishlist-message {
+    min-height: 1em;
+    margin-top: 10px;
+    color: #a3e6b0;
+    font-size: 13px;
 }
 
 /* --- Horizontal Reasons to Join Row ---
@@ -829,13 +879,118 @@ left side footer content
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    min-width: 170px;
-    padding: 8px;
+    width: 300px;
+    max-width: calc(100vw - 24px);
+    padding: 16px;
     background: #171821;
     border: 1px solid #333542;
     border-radius: 6px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
     z-index: 1001;
+}
+
+.profile-name-row,
+.profile-stats p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.profile-name-row {
+    margin-bottom: 14px;
+}
+
+.profile-name-row h2 {
+    overflow-wrap: anywhere;
+    font-size: 17px;
+}
+
+.profile-label {
+    flex: 0 0 auto;
+    color: #00d2ff;
+    font-size: 12px;
+}
+
+.profile-stats {
+    display: grid;
+    gap: 8px;
+}
+
+.profile-stats p {
+    color: #c4c7d5;
+    font-size: 13px;
+}
+
+.profile-stats strong {
+    color: #ffffff;
+}
+
+.profile-message {
+    margin-top: 10px;
+    color: #a3e6b0;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.profile-settings {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-settings > summary {
+    color: #e5e5e5;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.profile-settings > summary:hover,
+.profile-settings > summary:focus-visible {
+    color: #00d2ff;
+}
+
+.profile-settings-content {
+    display: grid;
+    gap: 8px;
+    padding-top: 12px;
+}
+
+.profile-settings-content > label {
+    color: #c4c7d5;
+    font-size: 12px;
+}
+
+.profile-settings-content input[type="text"] {
+    width: 100%;
+    padding: 9px 10px;
+    color: #ffffff;
+    background: #0b0c11;
+    border: 1px solid #3b3e50;
+    border-radius: 4px;
+}
+
+.profile-settings-content input[type="text"]:focus-visible {
+    outline: 2px solid #00d2ff;
+    outline-offset: 2px;
+}
+
+.profile-save-button {
+    padding: 8px 10px;
+    color: #0b0c11;
+    background: #00d2ff;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.profile-setting-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    cursor: pointer;
 }
 
 .profile-dropdown a {
