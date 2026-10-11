@@ -1075,13 +1075,47 @@ body {
 }
 
 .search-input{
-    
+    min-width: 0;
     width: 100%;
     font-size: 1rem;
     border: none;
 }
 
+/* Keep the custom clear control as the only visible search-clear button. */
+.search-input::-webkit-search-cancel-button,
+.search-input::-moz-search-clear,
+.search-input::-ms-clear {
+    display: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.search-clear {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    color: #444655;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.search-clear:hover,
+.search-clear:focus-visible {
+    color: #0b0c11;
+    background: #e4e6ed;
+}
+
+.search-clear:focus-visible {
+    outline: 2px solid #00d2ff;
+    outline-offset: 1px;
+}
+
 .search-icon{
+    flex: 0 0 45px;
     height: 40px;
     width: 45px;
     

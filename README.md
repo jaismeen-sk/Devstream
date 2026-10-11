@@ -8,7 +8,7 @@ Open `index.html` in a modern browser. No build step or package installation is 
 
 ## Features
 
-- Search courses by title and filter by category.
+- Search courses by title, clear the query with the visible clear button, and filter by category in Browse and My List.
 - Open course details in a native HTML dialog.
 - Save courses, update a learner display name, and track demo progress.
 - Keep profile preferences and course state in `localStorage`.
