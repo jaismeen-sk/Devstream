@@ -45,11 +45,41 @@
 
         <!-- <div class="profile-box">JS</div> -->
         <details class="profile-menu">
-            <summary class="profile-box" aria-label="Open profile menu">DS</summary>
+            <!-- JavaScript replaces these initials with the learner's saved initials. -->
+            <summary class="profile-box" id="profileAvatar" aria-label="Open profile menu">DL</summary>
             <div class="profile-dropdown">
-                <a href="#my-learning">My Learning</a>
-                <a href="#wishlist">Whishlist</a>
-                <a href="#settings">Settings</a>
+                <section class="profile-summary" aria-label="Learner profile">
+                    <div class="profile-name-row">
+                        <h2 id="profileName">DevStream Learner</h2>
+                        <span class="profile-label">Learner</span>
+                    </div>
+                    <div class="profile-stats">
+                        <p id="profileStreakStat">
+                            <span>Learning streak</span>
+                            <strong id="profileStreak">0 days</strong>
+                        </p>
+                        <p>
+                            <span>Saved courses</span>
+                            <strong id="profileSavedCount">0</strong>
+                        </p>
+                    </div>
+                    <p class="profile-message" id="profileMessage" role="status" aria-live="polite"></p>
+                </section>
+                <details class="profile-settings">
+                    <summary>Settings</summary>
+                    <div class="profile-settings-content">
+                        <label for="profileNameInput">Your name</label>
+                        <input id="profileNameInput" type="text" maxlength="32"
+                            autocomplete="name" placeholder="Enter your name">
+                        <button class="profile-save-button" id="saveProfileButton" type="button">
+                            Save name
+                        </button>
+                        <label class="profile-setting-option" for="showStreakToggle">
+                            <input id="showStreakToggle" type="checkbox" checked>
+                            Show learning streak
+                        </label>
+                    </div>
+                </details>
             </div>
         </details>
     </nav>
@@ -240,7 +270,15 @@
                         <button class="btn btn-complete" id="completeCourseBtn" type="button">
                             Mark completed
                         </button>
+                        <button class="btn btn-save-course" id="saveCourseButton"
+                            type="button" aria-pressed="false">
+                            <i class="fa-regular fa-bookmark" id="saveCourseIcon"
+                                aria-hidden="true"></i>
+                            <span id="saveCourseLabel">Save course</span>
+                        </button>
                     </div>
+                    <p class="wishlist-message" id="wishlistMessage"
+                        role="status" aria-live="polite"></p>
                 </section>
                 <!-- Enrollment is a frontend demo saved in this browser's localStorage. -->
                 <div class="course-dialog-actions">

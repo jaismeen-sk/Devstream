@@ -20,9 +20,22 @@ const dialogProgressBar = document.getElementById("dialogProgressBar");
 const dialogProgressStatus = document.getElementById("dialogProgressStatus");
 const progressCourseButton = document.getElementById("progressCourseBtn");
 const completeCourseButton = document.getElementById("completeCourseBtn");
+const saveCourseButton = document.getElementById("saveCourseButton");
+const saveCourseIcon = document.getElementById("saveCourseIcon");
+const saveCourseLabel = document.getElementById("saveCourseLabel");
+const wishlistMessage = document.getElementById("wishlistMessage");
 const enrollCourseButton = document.getElementById("enrollCourseBtn");
 const enrollmentMessage = document.getElementById("enrollmentMessage");
 const progressStorageKey = "devstream-course-progress";
+const profileAvatar = document.getElementById("profileAvatar");
+const profileName = document.getElementById("profileName");
+const profileNameInput = document.getElementById("profileNameInput");
+const saveProfileButton = document.getElementById("saveProfileButton");
+const profileStreak = document.getElementById("profileStreak");
+const profileStreakStat = document.getElementById("profileStreakStat");
+const profileSavedCount = document.getElementById("profileSavedCount");
+const profileMessage = document.getElementById("profileMessage");
+const showStreakToggle = document.getElementById("showStreakToggle");
 
 // Fail early with a useful message if required HTML elements were renamed or removed.
 if (!searchInput) {
@@ -55,15 +68,148 @@ if (
     !dialogProgressStatus ||
     !progressCourseButton ||
     !completeCourseButton ||
+    !saveCourseButton ||
+    !saveCourseIcon ||
+    !saveCourseLabel ||
+    !wishlistMessage ||
     !enrollCourseButton ||
     !enrollmentMessage
 ) {
     throw new Error("One or more course dialog elements were not found.");
 }
 
+if (
+    !profileAvatar ||
+    !profileName ||
+    !profileNameInput ||
+    !saveProfileButton ||
+    !profileStreak ||
+    !profileStreakStat ||
+    !profileSavedCount ||
+    !profileMessage ||
+    !showStreakToggle
+) {
+    throw new Error("One or more profile menu elements were not found.");
+}
+
 let selectedCategory = "all";
 let courseProgress = {};
 let progressStorageAvailable = true;
+const profileNameStorageKey = "devstream-profile-name";
+const streakStorageKey = "devstream-learning-streak";
+const showStreakStorageKey = "devstream-show-streak";
+const wishlistStorageKey = "devstream-wishlist";
+let learningStreak = { lastActiveDay: "", count: 0 };
+let savedCourseIds = new Set();
+let wishlistStorageAvailable = true;
+
+// Get today's date in the visitor's local timezone as YYYY-MM-DD.
+function getLocalDayKey(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+// Turn a saved day into a number so consecutive calendar days can be compared.
+function getDayNumber(dayKey) {
+    const [year, month, day] = dayKey.split("-").map(Number);
+    return Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+}
+
+// Show the learner's name and use its first letters for the profile avatar.
+function updateProfileName(name) {
+    const cleanName = name.trim() || "DevStream Learner";
+    profileName.textContent = cleanName;
+    profileAvatar.textContent = cleanName
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part[0].toUpperCase())
+        .join("");
+    profileNameInput.value = cleanName === "DevStream Learner" ? "" : cleanName;
+}
+
+// Read the display name saved by the user, or show the default name.
+try {
+    const savedName = localStorage.getItem(profileNameStorageKey);
+    updateProfileName(savedName || "DevStream Learner");
+} catch {
+    updateProfileName("DevStream Learner");
+    profileMessage.textContent = "Browser storage is unavailable; profile settings cannot be saved.";
+}
+
+// Read saved learning streak data and reject malformed values.
+try {
+    const savedStreak = localStorage.getItem(streakStorageKey);
+
+    if (savedStreak) {
+        const parsedStreak = JSON.parse(savedStreak);
+
+        if (
+            !parsedStreak ||
+            typeof parsedStreak.lastActiveDay !== "string" ||
+            !Number.isInteger(parsedStreak.count) ||
+            parsedStreak.count < 1
+        ) {
+            throw new Error("Saved learning streak has an invalid format.");
+        }
+
+        learningStreak = parsedStreak;
+    }
+} catch {
+    profileMessage.textContent = "Saved learning streak could not be read.";
+}
+
+// Read saved course IDs from the same localStorage key the profile uses.
+try {
+    const savedWishlist = localStorage.getItem(wishlistStorageKey);
+
+    if (savedWishlist) {
+        const parsedWishlist = JSON.parse(savedWishlist);
+
+        if (!Array.isArray(parsedWishlist) ||
+            !parsedWishlist.every((courseId) => typeof courseId === "string")) {
+            throw new Error("Saved wishlist has an invalid format.");
+        }
+
+        savedCourseIds = new Set(parsedWishlist);
+    }
+} catch {
+    wishlistStorageAvailable = false;
+    profileSavedCount.textContent = "—";
+    wishlistMessage.textContent = "Saved courses could not be read from browser storage.";
+}
+
+// Display the number of different courses saved to the wishlist.
+function updateSavedCourseCount() {
+    profileSavedCount.textContent = String(savedCourseIds.size);
+}
+
+updateSavedCourseCount();
+
+// Restore the learner's preference for showing or hiding their streak.
+try {
+    showStreakToggle.checked =
+        localStorage.getItem(showStreakStorageKey) !== "false";
+} catch {
+    profileMessage.textContent = "Streak display settings could not be read.";
+}
+
+// Hide stale streaks after a missed day; count changes only when course progress is updated.
+function updateProfileStreak() {
+    const today = getLocalDayKey();
+    const daysSinceActivity = learningStreak.lastActiveDay
+        ? getDayNumber(today) - getDayNumber(learningStreak.lastActiveDay)
+        : Infinity;
+    const visibleStreak =
+        daysSinceActivity <= 1 ? learningStreak.count : 0;
+
+    profileStreak.textContent =
+        `${visibleStreak} ${visibleStreak === 1 ? "day" : "days"}`;
+    profileStreakStat.hidden = !showStreakToggle.checked;
+}
+
+updateProfileStreak();
 
 // Restore each course's saved percentage from this browser.
 try {
@@ -197,10 +343,71 @@ function saveCourseProgress(courseId, percent) {
         return false;
     }
 
+    // A learning day counts when the learner records progress on a course.
+    recordLearningActivity();
     updateAllCourseProgress();
     updateDialogProgress();
     return true;
 }
+
+// Increase the streak on consecutive active days, or restart it after a gap.
+function recordLearningActivity() {
+    const today = getLocalDayKey();
+    const previousDay = learningStreak.lastActiveDay;
+    const daysSinceActivity = previousDay
+        ? getDayNumber(today) - getDayNumber(previousDay)
+        : Infinity;
+
+    if (daysSinceActivity === 0) {
+        return;
+    }
+
+    const nextStreak = {
+        lastActiveDay: today,
+        count: daysSinceActivity === 1 ? learningStreak.count + 1 : 1
+    };
+
+    try {
+        localStorage.setItem(streakStorageKey, JSON.stringify(nextStreak));
+        learningStreak = nextStreak;
+        updateProfileStreak();
+    } catch {
+        profileMessage.textContent =
+            "Progress was saved, but the learning streak could not be saved.";
+    }
+}
+
+// Save a learner-entered display name in this browser.
+saveProfileButton.addEventListener("click", () => {
+    const name = profileNameInput.value.trim();
+
+    if (!name) {
+        profileMessage.textContent = "Enter a name before saving.";
+        profileNameInput.focus();
+        return;
+    }
+
+    try {
+        localStorage.setItem(profileNameStorageKey, name);
+        updateProfileName(name);
+        profileMessage.textContent = "Your profile name was saved.";
+    } catch {
+        profileMessage.textContent =
+            "Your name could not be saved. Browser storage may be blocked.";
+    }
+});
+
+// Remember whether the learner wants the streak displayed in the profile menu.
+showStreakToggle.addEventListener("change", () => {
+    try {
+        localStorage.setItem(showStreakStorageKey, String(showStreakToggle.checked));
+        updateProfileStreak();
+        profileMessage.textContent = "Streak display setting was saved.";
+    } catch {
+        profileMessage.textContent =
+            "This setting could not be saved. Browser storage may be blocked.";
+    }
+});
 
 // Show cards that match both the current search text and selected category.
 function filterCourses() {
@@ -276,6 +483,26 @@ playButton.addEventListener("click", () => {
     scrollToSection(courseSection);
 });
 
+// Change the bookmark icon and button label to match the selected course's saved state.
+function updateSaveCourseButton() {
+    const courseId = courseDialog.dataset.courseId;
+
+    if (!courseId) {
+        return;
+    }
+
+    const isSaved = savedCourseIds.has(courseId);
+    saveCourseButton.setAttribute("aria-pressed", String(isSaved));
+    saveCourseButton.setAttribute(
+        "aria-label",
+        `${isSaved ? "Remove" : "Save"} this course ${isSaved ? "from" : "to"} your wishlist`
+    );
+    saveCourseIcon.classList.toggle("fa-solid", isSaved);
+    saveCourseIcon.classList.toggle("fa-regular", !isSaved);
+    saveCourseLabel.textContent = isSaved ? "Saved" : "Save course";
+    saveCourseButton.disabled = !wishlistStorageAvailable;
+}
+
 // Copy one card's data into the shared dialog, then open it.
 function openCourseDialog(card) {
     const title = card.querySelector("h3");
@@ -304,6 +531,8 @@ function openCourseDialog(card) {
 
     courseDialog.dataset.courseId = courseId;
     enrollmentMessage.textContent = "";
+    wishlistMessage.textContent = "";
+    updateSaveCourseButton();
     updateDialogProgress();
 
     // localStorage remembers demo enrollments after the page is refreshed.
@@ -320,6 +549,43 @@ function openCourseDialog(card) {
 
     courseDialog.showModal();
 }
+
+// Add or remove this course from the browser's saved wishlist.
+saveCourseButton.addEventListener("click", () => {
+    const courseId = courseDialog.dataset.courseId;
+
+    if (!courseId) {
+        throw new Error("No course is selected to save.");
+    }
+
+    const nextSavedCourseIds = new Set(savedCourseIds);
+
+    if (nextSavedCourseIds.has(courseId)) {
+        nextSavedCourseIds.delete(courseId);
+    } else {
+        nextSavedCourseIds.add(courseId);
+    }
+
+    try {
+        localStorage.setItem(
+            wishlistStorageKey,
+            JSON.stringify(Array.from(nextSavedCourseIds))
+        );
+    } catch {
+        wishlistStorageAvailable = false;
+        saveCourseButton.disabled = true;
+        wishlistMessage.textContent =
+            "Could not save this course. Browser storage may be blocked.";
+        return;
+    }
+
+    savedCourseIds = nextSavedCourseIds;
+    wishlistMessage.textContent = savedCourseIds.has(courseId)
+        ? "Course saved to your wishlist."
+        : "Course removed from your wishlist.";
+    updateSaveCourseButton();
+    updateSavedCourseCount();
+});
 
 // Make each course card open the dialog with mouse, Enter, or Space.
 courseCards.forEach((card) => {
